@@ -4,20 +4,28 @@ A lab of Alchemy MCP skills: live onchain tools inside your coding agent — no 
 
 Hosted MCP is Alchemy’s tool server at https://mcp.alchemy.com/mcp (OAuth, no API key). MCP (Model Context Protocol) is the tools your coding agent can call.
 
+## What you can do
+
+Connect MCP once, then run a skill in Claude Code or Cursor.
+
+**Now — before-you-sign.** Preflight a wallet, a mined transaction, or calldata you are about to sign. The agent calls Alchemy MCP and returns asset changes, risk flags, and **OK / REVIEW / DO NOT SIGN**. Read-only: it does not broadcast.
+
+**Next.** A multi-chain wallet snapshot, a smart-account session lab, and a Solana DAS gallery.
+
 ## Setup
 
 Connect the hosted MCP server first: see [SETUP.md](SETUP.md).
 
 ## Skills
 
-| Skill | Status |
-| --- | --- |
-| [before-you-sign](skills/before-you-sign/) | shipped — validated on Alchemy Free with hosted MCP |
-| multichain-brief | planned |
-| aa-session-lab | planned |
-| solana-das-gallery | planned |
+| Skill | Status | What it does |
+| --- | --- | --- |
+| [before-you-sign](skills/before-you-sign/) | shipped — Alchemy Free | Preflight a wallet, a mined tx, or unsigned calldata. First run: `vitalik.eth`. The useful run: simulate an approve — do not send. |
+| multichain-brief | planned | One address or ENS → tokens (USD when the API has them) + NFTs across Ethereum L2s. A short briefing, not a portfolio app. |
+| aa-session-lab | planned | ERC-4337 / smart-wallet session: capabilities, prepare calls, **simulate** a UserOp. Send stays optional and explicit. |
+| solana-das-gallery | planned | Solana wallet or creator → assets via DAS. The other half of Alchemy MCP if you only know EVM. |
 
-Planned names are index-only; no folders yet.
+Planned rows are index-only; no folders yet.
 
 ## 60-second path
 
