@@ -56,13 +56,18 @@ CONTRIBUTING.md        how to add a lab or a skill
 
 ## Roadmap
 
-Planned, not yet in the repo. The first three continue the safety story of Labs 1 and 2; the rest widen the tool coverage.
+Planned, not yet in the repo. Every tool below was probed on the Free tier on 2026-09-07 and works. Labs 1 and 2 are the **safety** track; the next three are the **explore** track, each showing a tool family the repo has not touched yet; the last two are **operate**.
 
-- **token-check**: is this token real? Metadata, price, transfer volume, and holder spread against known clones
-- **allowance-audit**: what have I already approved? Needs the Approval event history, which the Free tier caps at a 10-block log window, so this one is PAYG or uses transfers as a proxy
-- **multichain-brief**: one address or ENS, tokens and NFTs across Ethereum L2s with USD totals
-- **solana-wallet-brief**: the Lab 1 wallet briefing for a Solana address, via the Digital Asset Standard API
-- **usage-cost**: what did all this cost me? Compute units per lab from the usage tools, as an appendix to Lab 0
+| # | Lab | One-line hook | Tool family it introduces |
+|---|-----|---------------|---------------------------|
+| 3 | **multichain-brief** | One call, every chain, in dollars. An address or ENS, native and token balances across Ethereum and its L2s with USD values, plus a 7-day price change. | Multi-chain token API, price feeds, historical prices |
+| 4 | **nft-collection-brief** | Is this NFT worth what they say? Collection metadata, floor price, holder count, and the rarity of one token id. | NFT API: floor price, owners, attributes, rarity |
+| 5 | **solana-wallet-brief** | The Lab 1 wallet briefing for a Solana address: balance, assets via the Digital Asset Standard, recent signatures. Needs Solana enabled on your app. | Solana RPC and DAS |
+| 6 | **allowance-check** | Which well-known spenders can already move my tokens? A matrix of your address against a list of known routers and marketplaces. Honest scope: unknown spenders need event history, which Free caps at 10 blocks. | Allowance reads at scale |
+| 7 | **wallet-checkup** | One prompt that runs Labs 1, 2, and 6 on your own wallet and merges them into a single report. A capstone that shows skills composing. | Agent orchestration, no new tools |
+| 8 | **watch-a-wallet** | Get notified when an address moves. Creates an Alchemy webhook, so it is the one lab that writes to your account. Opt-in, clearly labelled, with teardown. | Notify webhooks |
+
+Dropped from the earlier list: **token-check**, because Lab 2 already covers metadata, price, counterfeit detection, and burst patterns for a token address. **aa-session-lab** is folded into a possible Lab 1 appendix that explains a UserOp by hash, read-only. Usage and cost tools are a step in Lab 0 rather than a lab of their own.
 
 ## Links
 

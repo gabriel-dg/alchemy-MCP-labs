@@ -53,6 +53,7 @@ The address in step 5 is `vitalik.eth`. Lab 1 shows how the agent resolves the n
 - **Another network**: change `eth-mainnet` to `base-mainnet` or `arb-mainnet` in steps 4 and 5. If the call fails with a message about the app not supporting the network, enable it in the dashboard for your app.
 - **A token balance**: add a step 6, "Call getTokenBalancesByAddress on eth-mainnet for the same address and show the first 5 entries." Notice the first page is mostly spam tokens with vanity addresses. Lab 1 explains why.
 - **Solana**: add "Call solana_getBalance on solana-mainnet for `<any Solana address>`." Your app needs Solana enabled.
+- **What did that cost?** Add "Call get_usage_summary and tell me how many compute units this month has used so far." Every call costs compute units, and the Free tier has a monthly allowance shown in the dashboard. For scale: building and cold-testing this whole repo on 2026-09-07, including ten agent runs, used 61,408 compute units at $0.00.
 
 ## Troubleshooting
 
