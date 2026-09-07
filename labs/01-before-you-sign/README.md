@@ -104,6 +104,7 @@ Values observed on 2026-09-07. Each scenario was run cold by an agent that saw o
   - **REVIEW**: something needs a human look: a delegation on the wallet you are signing from, an unlimited approval to a contract the agent cannot identify, a surprising recipient, a mined transaction that reverted or moved something the calldata does not explain, or a required tool failed.
   - **DO NOT SIGN**: only for unsigned calldata. Simulation reverts, unlimited approve to a spender with no code, spam contract, or a drain pattern.
   - For a mined transaction the verdict describes what happened. Signing is moot, so an EIP-7702 delegation on the sender is reported as information, not as a reason for REVIEW.
+  - When a REVIEW names an address you do not recognise (a spender, a delegate, a recipient), run [Lab 2](../02-contract-inspector/README.md) on it. That is what Lab 2 is for.
 - **Tools used.** The exact MCP calls in order. Use it to learn the API: every line is a tool you can call yourself.
 - **Gaps.** What the skill could not check and why. "Paid plan required" means a PAYG tool was skipped. "Page 1 only" means the list was truncated. A missing token on page 1 does not mean the wallet does not hold it.
 

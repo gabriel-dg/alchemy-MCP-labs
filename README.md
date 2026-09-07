@@ -32,6 +32,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 |---|-----|------|----------------|
 | 0 | [hello-mcp](labs/00-hello-mcp/) | 5 min | Connection check. Select an app, list networks, read a block number and a balance. |
 | 1 | [before-you-sign](labs/01-before-you-sign/) | 15 min | Preflight a wallet (ENS or address), inspect a mined transaction, or **simulate unsigned calldata** and get an **OK / REVIEW / DO NOT SIGN** verdict. Runs on the Free tier. |
+| 2 | [contract-inspector](labs/02-contract-inspector/) | 10 min | Answer "what is this address?": type, proxy, verified source, token identity, price, age, activity, and an **ESTABLISHED / UNCERTAIN / RED FLAGS / NOT A CONTRACT** assessment. The follow-up to every Lab 1 REVIEW. |
 
 ## What a lab looks like
 
@@ -43,8 +44,10 @@ Every lab README has the same sections: **Goal**, **Run it** (a prompt to paste)
 labs/                  walkthroughs for humans (start here)
   00-hello-mcp/
   01-before-you-sign/
+  02-contract-inspector/
 skills/                playbooks for agents (what a lab runs)
   before-you-sign/
+  contract-inspector/
 docs/how-it-works.md   how the pieces fit, glossary, tool map
 SETUP.md               connect your agent, create an app, Free vs paid
 CLAUDE.md              entry point for Claude Code when it opens this repo
@@ -53,11 +56,13 @@ CONTRIBUTING.md        how to add a lab or a skill
 
 ## Roadmap
 
-Planned, not yet in the repo:
+Planned, not yet in the repo. The first three continue the safety story of Labs 1 and 2; the rest widen the tool coverage.
 
-- **multichain-brief**: one address or ENS, tokens and NFTs across Ethereum L2s, as a short briefing
-- **aa-session-lab**: ERC-4337 smart-wallet session, simulate a UserOp, sending stays optional and explicit
-- **solana-das-gallery**: Solana wallet or creator, assets via the Digital Asset Standard API
+- **token-check**: is this token real? Metadata, price, transfer volume, and holder spread against known clones
+- **allowance-audit**: what have I already approved? Needs the Approval event history, which the Free tier caps at a 10-block log window, so this one is PAYG or uses transfers as a proxy
+- **multichain-brief**: one address or ENS, tokens and NFTs across Ethereum L2s with USD totals
+- **solana-wallet-brief**: the Lab 1 wallet briefing for a Solana address, via the Digital Asset Standard API
+- **usage-cost**: what did all this cost me? Compute units per lab from the usage tools, as an appendix to Lab 0
 
 ## Links
 

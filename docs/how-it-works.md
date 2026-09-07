@@ -28,7 +28,11 @@ You never write code. The skill tells the agent which tools to call and in what 
 
 **Compute units (CU).** Alchemy's usage metric. Every call costs some CU. Free apps have a monthly allowance and a rate limit. The labs here use a few hundred CU per run.
 
-**Free vs PAYG.** Some tools and parameters are paid: NFT spam filters, the Trace API, the Debug API. They return a 400 that mentions payg, upgrade, or billing. The skills skip them and note it under Gaps.
+**Free vs PAYG.** Some tools and parameters are paid: NFT spam filters, the Trace API, the Debug API, and event-log queries wider than 10 blocks. They return a 400 that mentions payg, upgrade, or billing, or an error that names the allowed range. The skills skip them and note it under Gaps.
+
+**Proxies.** Many contracts are a thin proxy that forwards every call to an implementation contract stored in a known storage slot. Lab 2 reads those slots with `ethGetStorageAt`. The logic you are trusting lives at the implementation, and it can be upgraded.
+
+**Verified source.** Alchemy decodes simulated calls using Etherscan's ABI when the contract's source is verified there. Lab 2 uses that as a Free-tier "is the source public" signal: probe a common function with `simulateExecution` and see whether the response carries a decoded block.
 
 **Pagination and "page 1 only".** Token, NFT, and transfer lists are paginated and often sorted by address, not by value. The first page of a famous wallet is usually airdropped spam tokens with vanity addresses. The skill labels these results "page 1 only" and never concludes that a token is absent because it did not appear on page 1.
 
@@ -45,10 +49,10 @@ The server exposes about 190 tools. Grouped by family, with the ones the labs us
 | Family | Examples | Notes |
 |--------|----------|-------|
 | Admin | **`ping`**, **`list_apps`**, **`select_app`**, **`list_chains`**, `get_app`, `get_usage_summary` | `select_app` first. Do not use `create_app` or webhook tools in labs |
-| JSON-RPC reads | **`ethBlockNumber`**, **`ethGetBalance`**, **`ethGetCode`**, **`ethCall`**, **`ethGetTransactionByHash`**, **`ethGetTransactionReceipt`**, `ethGetLogs`, `ethGasPrice`, **`web3Sha3`** | Standard Ethereum RPC on any EVM network |
-| Transfers | **`getAssetTransfers`** | History of ETH, ERC-20, ERC-721, ERC-1155 movements for an address |
-| Tokens | **`getTokenBalancesByAddress`**, `getTokensByAddress`, **`getTokenMetadata`**, **`getTokenAllowance`**, `getTokenPricesBySymbol` | Prices may not exist for every token |
-| NFTs | **`getNFTsForOwner`**, `getNFTMetadata`, `getOwnersForContract`, **`isSpamContract`**, `getFloorPrice` | Spam filters are paid |
+| JSON-RPC reads | **`ethBlockNumber`**, **`ethGetBalance`**, **`ethGetCode`**, **`ethGetStorageAt`**, **`ethGetTransactionCount`**, **`ethCall`**, **`ethGetTransactionByHash`**, **`ethGetTransactionReceipt`**, **`ethGetLogs`**, `ethGasPrice`, **`web3Sha3`** | Standard Ethereum RPC on any EVM network. Logs are capped at a 10-block range on Free |
+| Transfers | **`getAssetTransfers`** | History of ETH, ERC-20, ERC-721, ERC-1155 movements for an address or a token contract |
+| Tokens | **`getTokenBalancesByAddress`**, `getTokensByAddress`, **`getTokenMetadata`**, **`getTokenAllowance`**, **`getTokenPricesByAddress`**, `getTokenPricesBySymbol` | Prices may not exist for every token |
+| NFTs | **`getNFTsForOwner`**, **`getContractMetadata`**, `getNFTMetadata`, `getOwnersForContract`, **`isSpamContract`**, `getFloorPrice` | Spam filters are paid |
 | Simulation | **`simulateAssetChanges`**, **`simulateExecution`**, `simulateAssetChangesBundle` | Free. Read-only preview of an unsigned transaction |
 | Trace / debug | `traceTransaction`, `traceCall`, `debugTraceTransaction`, `debugTraceCall` | Paid |
 | Account abstraction | `estimateUserOperationGas`, `getUserOperationReceipt`, `requestGasAndPaymasterAndData` | For ERC-4337 flows, planned lab |

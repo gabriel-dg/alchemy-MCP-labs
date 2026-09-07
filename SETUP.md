@@ -103,8 +103,8 @@ Every lab in this repo completes on the Free tier. Some tools are paid and retur
 
 | Tier | What works |
 |------|------------|
-| Free | JSON-RPC reads, asset transfers, token balances and metadata, transaction simulation, NFT lists without spam filters |
-| PAYG | NFT spam filters (`excludeFilters`, `spamConfidenceLevel`), Trace API, Debug API. `isSpamContract` may also require it |
+| Free | JSON-RPC reads, asset transfers, token balances, metadata and prices, transaction simulation, NFT lists without spam filters, event logs over a 10-block window |
+| PAYG | NFT spam filters (`excludeFilters`, `spamConfidenceLevel`), Trace API, Debug API, event logs over wider block ranges. `isSpamContract` may also require it |
 
 If you are on a paid plan and want traces or spam filters, say so in your prompt, for example "I am on PAYG, traces are fine."
 

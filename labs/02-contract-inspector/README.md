@@ -1,0 +1,137 @@
+# Lab 2: contract inspector
+
+## Goal
+
+Answer "what is this address?" without leaving your agent. You give it an address and get back its type, identity, a table of trust signals, red flags, and one of four assessments: **ESTABLISHED**, **UNCERTAIN**, **RED FLAGS**, or **NOT A CONTRACT**.
+
+This is the natural follow-up to Lab 1. Every REVIEW verdict there ends with an address you are told to look at. This lab looks at it.
+
+The playbook the agent follows is [skills/contract-inspector/SKILL.md](../../skills/contract-inspector/SKILL.md). Everything runs on the Free tier. Nothing is signed or sent.
+
+## What the agent checks
+
+| Signal | How | Why it matters |
+|--------|-----|----------------|
+| Has code | `ethGetCode` | No code means no contract. An approval to it is an approval to whoever holds the key. |
+| Proxy | `ethGetStorageAt` on three known slots | Upgradeable contracts hide their logic behind an implementation address. |
+| Verified source | `simulateExecution` decodes with the Etherscan ABI only when the contract is verified | Free-tier stand-in for "is the source public". |
+| Token identity | `getTokenMetadata`, `getContractMetadata` | Name, symbol, decimals, logo, NFT type, spam classification. |
+| Price feed | `getTokenPricesByAddress` | A price means an index listing and a market. |
+| Counterfeit | symbol compared with a table of canonical addresses | The "ETH" and "USDC" clones that show up in wallet histories. |
+| Age and last activity | `getAssetTransfers` first and last | A token whose whole life fits in one afternoon is a spam drop. |
+| Activity now | `ethGetLogs` over the last 5 blocks | Free tier allows a 10-block window. Enough to see if a contract is busy. |
+
+## Before you start
+
+- [SETUP.md](../../SETUP.md) done and [Lab 0](../00-hello-mcp/README.md) passed
+- This repo open in your agent
+- Claude Code users: the repo's settings pre-approve every tool this lab uses
+
+## Run it
+
+Pick one. Paste the block. The agent selects an app if needed, makes 8 to 15 tool calls, and prints the report.
+
+### A. Uniswap Permit2
+
+```text
+Read skills/contract-inspector/SKILL.md in this repo and follow it exactly. Select an Alchemy app first if none is selected. Use only the tools the skill allows. Never sign, send, or broadcast.
+
+Address: 0x000000000022D473030F116dDEE9F6B43aC78BA3
+Network: eth-mainnet
+```
+
+### B. USDC (a proxy)
+
+```text
+Read skills/contract-inspector/SKILL.md in this repo and follow it exactly. Select an Alchemy app first if none is selected. Use only the tools the skill allows. Never sign, send, or broadcast.
+
+Address: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+Network: eth-mainnet
+```
+
+### C. A counterfeit "ETH" token
+
+```text
+Read skills/contract-inspector/SKILL.md in this repo and follow it exactly. Select an Alchemy app first if none is selected. Use only the tools the skill allows. Never sign, send, or broadcast.
+
+Address: 0xcbb23e2ee87384799c45508c8a5ccaa6c611dd48
+Network: eth-mainnet
+```
+
+### D. The EIP-7702 delegate from Lab 1
+
+```text
+Read skills/contract-inspector/SKILL.md in this repo and follow it exactly. Select an Alchemy app first if none is selected. Use only the tools the skill allows. Never sign, send, or broadcast.
+
+Address: 0x5a7fc11397e9a8ad41bf10bf13f22b0a63f96f6d
+Network: eth-mainnet
+```
+
+### E. The spender from Lab 1's approve
+
+```text
+Read skills/contract-inspector/SKILL.md in this repo and follow it exactly. Select an Alchemy app first if none is selected. Use only the tools the skill allows. Never sign, send, or broadcast.
+
+Address: 0x1111111111111111111111111111111111111111
+Network: eth-mainnet
+```
+
+## What you should see
+
+Every run produces the same shape:
+
+```markdown
+# Contract inspector
+- **Address**
+- **Network**
+- **Type**
+- **Identity**
+- **Signals** (table)
+- **Red flags**
+- **Assessment:** ESTABLISHED | UNCERTAIN | RED FLAGS | NOT A CONTRACT
+- **What to do next**
+- **Tools used (in order)**
+- **Gaps**
+```
+
+Values observed on 2026-09-07. Full cold-run reports with every tool call are in [skills/contract-inspector/examples/](../../skills/contract-inspector/examples/).
+
+**A, Permit2.** Contract, no proxy. The verified-source probe matches on `DOMAIN_SEPARATOR` after `name` and `owner` revert. Not a token. Busy: several events in a 5-block window. First inbound transfer seen 2023. Expected: **ESTABLISHED**.
+
+**B, USDC.** Proxy. The EIP-1967 slot is empty but the legacy slot holds the implementation `0x4350…02dd`. The probe decodes `name()` as "USD Coin" through a `DELEGATECALL`. Token metadata with logo, price about one dollar, first transfer 2018. Expected: **ESTABLISHED**, with the proxy explained.
+
+**C, counterfeit ETH.** Contract, no proxy, no ABI match. Token metadata says name "ETH", symbol "ETH", no logo. No price. First and last transfers both on 2026-06-24, two hours apart, nothing since. Expected: **RED FLAGS** for a native-asset symbol on an ERC-20 plus a burst pattern.
+
+**D, the delegate.** Contract, no proxy, no ABI match on three probes. Not a token. Zero events in the window. First inbound transfer 2025-10. Expected: **UNCERTAIN**: it exists and is used, but nothing on Free lets the agent say what it is.
+
+**E, the spender.** Code `0x`, nonce 0, and it holds about 5.7 ETH that people have sent to it by mistake. Expected: **NOT A CONTRACT**.
+
+## Reading the output
+
+- **Type** is the structural answer. Contract, proxy, delegated account, or nothing. Read it first.
+- **Signals** is the evidence. Each row is one tool call. When the assessment surprises you, this table says why.
+- **Verified source** is a heuristic. The probe tries three common functions. A contract that has none of them shows "no ABI match" even if its source is public. Treat "no match" as "could not confirm", not "unverified".
+- **Assessment.** ESTABLISHED means widely used and verifiable, not safe. UNCERTAIN means the Free-tier signals ran out; a block explorer is the next step. RED FLAGS means at least one signal is the shape of a scam. NOT A CONTRACT means an approval or a send goes to a person, not to code.
+- **What to do next** is the one sentence to act on.
+
+## Try your own
+
+**The address from a Lab 1 REVIEW.** Copy the spender, delegate, or recipient the report named and paste it as `Address:`. That is the intended loop.
+
+**A token someone is shilling.** Paste its contract address. Scenario C shows what a fake looks like; a real one shows a logo, a price, and a long transfer history.
+
+**A dapp's contract before you connect.** Copy the contract address from the wallet popup. Scenario A is what a well-known protocol looks like.
+
+**Another network.** Change `Network:` to `base-mainnet` or `arb-mainnet`. The counterfeit table only covers Ethereum mainnet addresses; the native-asset rule still applies. The app must have the network enabled.
+
+**Install as a skill (Claude Code).** Inside this repo, type `/contract-inspector 0x…`. To use it anywhere, copy `skills/contract-inspector/` into `~/.claude/skills/`.
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `ethGetLogs` fails with a block-range message | The Free tier allows a 10-block range. The skill uses 5. If the agent widened it, tell it to use latest minus 4 to latest. |
+| `getTokenMetadata` errors with "expected a valid token contract" | Expected for non-token contracts. The skill falls back to NFT metadata, then to "non-token contract". |
+| Verified-source probe says no match on a contract you know is verified | The contract has none of `name()`, `owner()`, `DOMAIN_SEPARATOR()`. Report it as "could not confirm". |
+| Huge bytecode floods the output | Server truncation is normal. Non-empty means "has code". The agent should not paste bytecode into the report. |
+| Agent cannot find the skill file | The repo is not the working directory. Open the repo folder in your agent, or paste the contents of `SKILL.md` into the prompt. |
