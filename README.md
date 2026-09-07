@@ -1,46 +1,70 @@
 # alchemy-mcp-labs
 
-A lab of Alchemy MCP skills: live onchain tools inside your coding agent — no glue code.
+Hands-on labs for **Alchemy MCP**: give your coding agent (Claude Code, Cursor, VS Code, Codex) live read access to 70+ blockchains, then use it for something useful.
 
-Hosted MCP is Alchemy’s tool server at https://mcp.alchemy.com/mcp (OAuth, no API key). MCP (Model Context Protocol) is the tools your coding agent can call.
+**Alchemy MCP** is a hosted server that exposes Alchemy's blockchain APIs as tools an AI agent can call: balances, token holdings, NFTs, transaction lookups, transaction simulation, Solana data. **MCP** (Model Context Protocol) is the open standard that lets agents discover and call those tools. You connect once with your Alchemy account. No API keys in config files, no code to write.
 
-## What you can do
+This repo gives you:
 
-Connect MCP once, then run a skill in Claude Code or Cursor.
+- **Labs** in `labs/`: step-by-step walkthroughs you run by pasting a prompt into your agent. Each one tells you what to expect, how to read the result, and how to adapt it to your own wallet or transaction.
+- **Skills** in `skills/`: reusable playbooks that tell the agent exactly which tools to call and how to report. Labs use them. You can also install them so your agent runs them by name.
 
-**before-you-sign.** Preflight a wallet, a mined transaction, or calldata you are about to sign.
-The agent calls Alchemy MCP and returns asset changes, risk flags, and **OK / REVIEW / DO NOT SIGN**.
-Read-only: it does not broadcast.
+Everything here is read-only. Nothing signs, sends, or broadcasts.
 
-**Next.** A multi-chain wallet snapshot, a smart-account session lab, and a Solana DAS gallery.
+## Who this is for
 
-## Setup
+- Developers who want to see what Alchemy MCP does before writing integration code
+- Anyone using a coding agent who wants live onchain data inside their workflow
+- People who want a second opinion before signing a transaction
 
-Connect the hosted MCP server first: see [SETUP.md](SETUP.md).
+You do not need to know Solidity. You need a free Alchemy account and an agent that supports MCP.
 
-## Skills
+## Quick start (about 10 minutes)
 
-| Skill                                      | Status                 | What it does                                                                                                                       |
-| ------------------------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| [before-you-sign](skills/before-you-sign/) | shipped — Alchemy Free | Preflight a wallet, a mined tx, or unsigned calldata. First run: `vitalik.eth`. The useful run: simulate an approve — do not send. |
-| multichain-brief                           | planned                | One address or ENS → tokens (USD when the API has them) + NFTs across Ethereum L2s. A short briefing, not a portfolio app.         |
-| aa-session-lab                             | planned                | ERC-4337 / smart-wallet session: capabilities, prepare calls, **simulate** a UserOp. Send stays optional and explicit.             |
-| solana-das-gallery                         | planned                | Solana wallet or creator → assets via DAS. The other half of Alchemy MCP if you only know EVM.                                     |
+1. **Connect** your agent to `https://mcp.alchemy.com/mcp` and create one Alchemy app. Follow [SETUP.md](SETUP.md).
+2. **Open this repo** in your agent: run `claude` from the repo folder, or open the folder in Cursor or VS Code. The prompts reference files by path, so the agent needs to be inside the repo.
+3. **Run Lab 0**: paste the prompt from [labs/00-hello-mcp](labs/00-hello-mcp/README.md). Five tool calls that prove the connection works.
+4. **Run Lab 1**: paste a prompt from [labs/01-before-you-sign](labs/01-before-you-sign/README.md). A real pre-sign safety report on a wallet, a mined transaction, or unsigned calldata.
 
-Planned rows are index-only; no folders yet.
+## Labs
 
-## 60-second path
+| # | Lab | Time | What you learn |
+|---|-----|------|----------------|
+| 0 | [hello-mcp](labs/00-hello-mcp/) | 5 min | Connection check. Select an app, list networks, read a block number and a balance. |
+| 1 | [before-you-sign](labs/01-before-you-sign/) | 15 min | Preflight a wallet (ENS or address), inspect a mined transaction, or **simulate unsigned calldata** and get an **OK / REVIEW / DO NOT SIGN** verdict. Runs on the Free tier. |
 
-1. Connect hosted MCP ([SETUP.md](SETUP.md))
-2. Tell the agent: **Select an Alchemy app**
-3. Paste [skills/before-you-sign/PROMPT.md](skills/before-you-sign/PROMPT.md) and run **Input 1 (`vitalik.eth`) only**. Placeholders (Inputs 2–3) are later.
+## What a lab looks like
 
-## Unsigned calldata (Branch B)
+Every lab README has the same sections: **Goal**, **Run it** (a prompt to paste), **What you should see**, **Reading the output**, **Try your own**, **Troubleshooting**. When a lab uses a skill, the skill folder holds the agent playbook (`SKILL.md`), the copy-paste prompts (`PROMPTS.md`), and reference runs with real observed values (`examples/`).
 
-If you later supply unsigned calldata, the agent must call `simulate*` (`simulateAssetChanges` / `simulateExecution`). Missing those calls on Branch B means you are not using the product. The first ENS run does not simulate.
+## Repo map
 
-## Deep link
+```
+labs/                  walkthroughs for humans (start here)
+  00-hello-mcp/
+  01-before-you-sign/
+skills/                playbooks for agents (what a lab runs)
+  before-you-sign/
+docs/how-it-works.md   how the pieces fit, glossary, tool map
+SETUP.md               connect your agent, create an app, Free vs paid
+CLAUDE.md              entry point for Claude Code when it opens this repo
+CONTRIBUTING.md        how to add a lab or a skill
+```
 
-- Skill: [skills/before-you-sign/](skills/before-you-sign/)
-- Skill body: [skills/before-you-sign/SKILL.md](skills/before-you-sign/SKILL.md)
-- Prompt: [skills/before-you-sign/PROMPT.md](skills/before-you-sign/PROMPT.md)
+## Roadmap
+
+Planned, not yet in the repo:
+
+- **multichain-brief**: one address or ENS, tokens and NFTs across Ethereum L2s, as a short briefing
+- **aa-session-lab**: ERC-4337 smart-wallet session, simulate a UserOp, sending stays optional and explicit
+- **solana-das-gallery**: Solana wallet or creator, assets via the Digital Asset Standard API
+
+## Links
+
+- [Alchemy MCP server docs](https://www.alchemy.com/docs/alchemy-mcp-server)
+- [Alchemy dashboard](https://dashboard.alchemy.com)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## License
+
+MIT. See [LICENSE](LICENSE).

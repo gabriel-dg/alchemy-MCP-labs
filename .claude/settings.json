@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__alchemy__ping",
+      "mcp__alchemy__list_apps",
+      "mcp__alchemy__get_app",
+      "mcp__alchemy__select_app",
+      "mcp__alchemy__list_chains",
+      "mcp__alchemy__web3Sha3",
+      "mcp__alchemy__ethBlockNumber",
+      "mcp__alchemy__ethGetBalance",
+      "mcp__alchemy__ethGetCode",
+      "mcp__alchemy__ethCall",
+      "mcp__alchemy__ethGetTransactionByHash",
+      "mcp__alchemy__ethGetTransactionReceipt",
+      "mcp__alchemy__ethEstimateGas",
+      "mcp__alchemy__ethGasPrice",
+      "mcp__alchemy__ethMaxPriorityFeePerGas",
+      "mcp__alchemy__getAssetTransfers",
+      "mcp__alchemy__simulateAssetChanges",
+      "mcp__alchemy__simulateExecution",
+      "mcp__alchemy__getTokenBalancesByAddress",
+      "mcp__alchemy__getTokensByAddress",
+      "mcp__alchemy__getTokenAllowance",
+      "mcp__alchemy__getTokenMetadata",
+      "mcp__alchemy__isSpamContract",
+      "mcp__alchemy__getNFTsForOwner",
+      "mcp__alchemy__getNFTsByAddress",
+      "mcp__alchemy__solana_getBalance"
+    ]
+  }
+}
