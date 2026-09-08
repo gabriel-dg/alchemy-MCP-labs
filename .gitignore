@@ -13,3 +13,6 @@ ehthumbs.db
 .idea/
 *.swp
 *~
+
+# Local maintainer notes, never published
+NOTES.local.md

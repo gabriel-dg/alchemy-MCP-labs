@@ -26,8 +26,6 @@ Nobody owns that address. Its nonce is zero, so it has never sent a transaction.
 
 Real [Lab 3](labs/03-multichain-brief/) output, observed 2026-09-08. Six tool calls, about twenty seconds. **No code, no API key, no RPC URLs.**
 
-<!-- demo clip goes here: ![Lab 3 running](docs/assets/lab-03.gif) - see "Recording a clip" in CONTRIBUTING.md -->
-
 ## Why bother
 
 **Alchemy MCP** is a hosted server that exposes Alchemy's blockchain APIs as tools an AI agent can call. **MCP** (Model Context Protocol) is the open standard that lets agents discover and call those tools. You connect once, over OAuth, with your Alchemy account.
