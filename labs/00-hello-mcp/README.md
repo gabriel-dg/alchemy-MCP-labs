@@ -55,6 +55,13 @@ The address in step 5 is `vitalik.eth`. Lab 1 shows how the agent resolves the n
 - **Solana**: add "Call solana_getBalance on solana-mainnet for `<any Solana address>`." Your app needs Solana enabled.
 - **What did that cost?** Add "Call get_usage_summary and tell me how many compute units this month has used so far." Every call costs compute units, and the Free tier has a monthly allowance shown in the dashboard. For scale: building and cold-testing this whole repo on 2026-09-07, including ten agent runs, used 61,408 compute units at $0.00.
 
+## Now build it
+
+You just drove Alchemy's JSON-RPC from an agent. The same calls are a plain HTTP request away when you want them inside your own code:
+
+- [API reference](https://www.alchemy.com/docs/reference/api-overview) - every API family in one page
+- [Free tier](https://www.alchemy.com/pricing) - 30M compute units a month, every mainnet and testnet. Add `get_usage_summary` to the prompt above to see what this lab actually cost you.
+
 ## Troubleshooting
 
 | Symptom | Fix |

@@ -129,6 +129,14 @@ Swap the spender for a known contract such as Uniswap's Permit2, `0x000000000022
 
 **Install as a skill (Claude Code).** The repo ships a pointer at `.claude/skills/before-you-sign/`, so inside this repo you can type `/before-you-sign vitalik.eth`. To use it in any project, copy `skills/before-you-sign/` into `~/.claude/skills/`.
 
+## Now build it
+
+The verdict you just read is `simulateAssetChanges` and `simulateExecution` with a rulebook on top. Both are free-tier HTTP endpoints, so the same preflight fits in a wallet, a bot, or a CI check that refuses to merge a dangerous calldata fixture:
+
+- [Transaction Simulation](https://www.alchemy.com/docs/reference/simulation) - asset changes, decoded execution, bundles
+- [Alchemy MCP server docs](https://www.alchemy.com/docs/alchemy-mcp-server) - keep driving it from an agent instead
+- [Free tier](https://www.alchemy.com/pricing) - 30M compute units a month
+
 ## Troubleshooting
 
 | Symptom | Fix |

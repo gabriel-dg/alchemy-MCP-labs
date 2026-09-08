@@ -2,7 +2,42 @@
 
 Hands-on labs for **Alchemy MCP**: give your coding agent (Claude Code, Cursor, VS Code, Codex) live read access to 160+ blockchains, then use it for something useful.
 
-**Alchemy MCP** is a hosted server that exposes Alchemy's blockchain APIs as tools an AI agent can call: balances, token holdings, NFTs, transaction lookups, transaction simulation, Solana data. **MCP** (Model Context Protocol) is the open standard that lets agents discover and call those tools. You connect once with your Alchemy account. No API keys in config files, no code to write.
+## You paste this
+
+```text
+/multichain-brief 0x1111111111111111111111111111111111111111
+```
+
+That is the Claude Code form. In any other MCP agent you paste the four-line prompt from [Lab 3](labs/03-multichain-brief/README.md) instead, with the address at the bottom.
+
+## Your agent answers this
+
+| Network | Balance | Price | USD |
+|---------|---------|-------|-----|
+| `eth-mainnet` | 5.717181 ETH | $2,497.33 | $14,277.69 |
+| `base-mainnet` | 0.353822 ETH | $2,497.33 | $883.61 |
+| `arb-mainnet` | 0.004091 ETH | $2,497.33 | $10.22 |
+| `opt-mainnet` | 0.001816 ETH | $2,497.33 | $4.54 |
+| `matic-mainnet` | 32.833741 POL | $0.0974 | $3.20 |
+
+**Total $15,179.25.** Five chains read in one request, with the 7-day move on what it holds: ETH +0.9%, POL +4.9%.
+
+Nobody owns that address. Its nonce is zero, so it has never sent a transaction. People just keep paying into it by mistake, on every chain, and airdrop spam finds it anyway: three of the tokens on page one have a URL in the symbol.
+
+Real [Lab 3](labs/03-multichain-brief/) output, observed 2026-09-08. Six tool calls, about twenty seconds. **No code, no API key, no RPC URLs.**
+
+<!-- demo clip goes here: ![Lab 3 running](docs/assets/lab-03.gif) - recording script in docs/demo-clip.md -->
+
+## Why bother
+
+**Alchemy MCP** is a hosted server that exposes Alchemy's blockchain APIs as tools an AI agent can call. **MCP** (Model Context Protocol) is the open standard that lets agents discover and call those tools. You connect once, over OAuth, with your Alchemy account.
+
+What that buys you over pointing an agent at a public RPC node:
+
+- **One endpoint, 160+ chains.** Ethereum, every major L2, Solana. No per-chain URLs to collect, rotate, or paste into a config file.
+- **One request, five chains.** The table above is a single `getTokensByAddress` call with a `networks` list: balances, metadata and USD prices come back together, already joined. That is Lab 3.
+- **More than JSON-RPC.** Token balances and metadata, USD prices with a year of daily history, NFTs, transfer history, and transaction simulation that shows what an unsigned transaction would do *before* you sign it. That last one is Lab 1.
+- **No API keys anywhere.** OAuth, and the server routes through the app you select. Nothing secret lands in a config file you might commit.
 
 This repo gives you:
 
@@ -19,7 +54,9 @@ Everything here is read-only. Nothing signs, sends, or broadcasts.
 
 You do not need to know Solidity. You need a free Alchemy account and an agent that supports MCP.
 
-## Quick start (about 40 minutes)
+## Quick start
+
+**First live result: five minutes.** The full four-lab track: about forty.
 
 1. **Get the repo**:
 
@@ -61,6 +98,7 @@ skills/                playbooks for agents (what a lab runs)
   contract-inspector/
   multichain-brief/
 docs/how-it-works.md   how the pieces fit, glossary, tool map
+docs/demo-clip.md      how to record the 20-second clip the README links
 SETUP.md               connect your agent, create an app, Free vs paid
 CLAUDE.md              entry point for Claude Code when it opens this repo
 CONTRIBUTING.md        how to add a lab or a skill
@@ -82,9 +120,10 @@ Dropped from the earlier list: **token-check**, because Lab 2 already covers met
 
 ## Links
 
-- [Alchemy MCP server docs](https://www.alchemy.com/docs/alchemy-mcp-server)
-- [Alchemy dashboard](https://dashboard.alchemy.com)
-- [Model Context Protocol](https://modelcontextprotocol.io)
+- [Alchemy MCP server docs](https://www.alchemy.com/docs/alchemy-mcp-server) - the server these labs talk to
+- [Alchemy dashboard](https://dashboard.alchemy.com) - create a free app, watch your compute units
+- [Alchemy API reference](https://www.alchemy.com/docs/reference/api-overview) - the same data over HTTP, for when you move from asking to shipping
+- [Model Context Protocol](https://modelcontextprotocol.io) - the open standard underneath
 
 ## License
 

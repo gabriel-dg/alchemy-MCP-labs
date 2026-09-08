@@ -126,6 +126,14 @@ Values observed on 2026-09-07. Full cold-run reports with every tool call are in
 
 **Install as a skill (Claude Code).** Inside this repo, type `/contract-inspector 0x…`. To use it anywhere, copy `skills/contract-inspector/` into `~/.claude/skills/`.
 
+## Now build it
+
+An identity check is Token API metadata, two storage reads, and a simulation probe for the verified-source signal. Wire it into a spender allowlist, a token-listing review, or an approval screen:
+
+- [Token API quickstart](https://www.alchemy.com/docs/reference/token-api-quickstart) - balances and metadata over HTTP
+- [Transaction Simulation](https://www.alchemy.com/docs/reference/simulation) - the decoded-response trick this lab uses to tell verified source from opaque bytecode
+- [Free tier](https://www.alchemy.com/pricing) - 30M compute units a month
+
 ## Troubleshooting
 
 | Symptom | Fix |

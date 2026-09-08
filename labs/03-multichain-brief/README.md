@@ -110,6 +110,14 @@ Values observed on 2026-09-08. Full cold-run reports with every tool call are in
 
 **Install as a skill (Claude Code).** Inside this repo, type `/multichain-brief vitalik.eth`. To use it anywhere, copy `skills/multichain-brief/` into `~/.claude/skills/`.
 
+## Now build it
+
+The five-chain call and the price rows in this brief are two Alchemy APIs you can hit directly. A portfolio view, a treasury dashboard, or a daily exposure report is the same two calls in a loop:
+
+- [Portfolio APIs](https://www.alchemy.com/docs/reference/portfolio-apis) - `getTokensByAddress` and friends: balances, metadata and prices across chains in one request
+- [Prices API quickstart](https://www.alchemy.com/docs/reference/prices-api-quickstart) - current and historical prices, by symbol or by address
+- [Free tier](https://www.alchemy.com/pricing) - 30M compute units a month. A five-network brief is a few hundred CU.
+
 ## Troubleshooting
 
 | Symptom | Fix |
