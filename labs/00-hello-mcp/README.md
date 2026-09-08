@@ -2,7 +2,7 @@
 
 ## Goal
 
-Prove that your agent can reach the Alchemy MCP server, select an app, and read live data. Five tool calls, two minutes. If this works, every other lab will.
+Prove that your agent can reach the Alchemy MCP server, select an app, and read live data. Five tool calls, about a minute of agent time and five with the reading. If this works, every other lab will.
 
 ## Before you start
 
@@ -35,7 +35,7 @@ Values observed on 2026-09-07:
 |------|------|--------|
 | 1 | `ping` | a short success reply |
 | 2 | `list_apps`, `select_app` | your app id and name, then "API key cached" |
-| 3 | `list_chains` | 70+ networks, ids like `eth-mainnet`, `base-mainnet`, `solana-mainnet` |
+| 3 | `list_chains` | 160+ networks, ids like `eth-mainnet`, `base-mainnet`, `solana-mainnet` |
 | 4 | `ethBlockNumber` | `0x18b9993`, which is block 25,926,035. Yours will be higher |
 | 5 | `ethGetBalance` | `0x5d2659027b0b8043` wei, about 6.71 ETH. Yours will differ |
 

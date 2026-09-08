@@ -1,6 +1,6 @@
 # alchemy-mcp-labs
 
-Hands-on labs for **Alchemy MCP**: give your coding agent (Claude Code, Cursor, VS Code, Codex) live read access to 70+ blockchains, then use it for something useful.
+Hands-on labs for **Alchemy MCP**: give your coding agent (Claude Code, Cursor, VS Code, Codex) live read access to 160+ blockchains, then use it for something useful.
 
 **Alchemy MCP** is a hosted server that exposes Alchemy's blockchain APIs as tools an AI agent can call: balances, token holdings, NFTs, transaction lookups, transaction simulation, Solana data. **MCP** (Model Context Protocol) is the open standard that lets agents discover and call those tools. You connect once with your Alchemy account. No API keys in config files, no code to write.
 
@@ -19,12 +19,20 @@ Everything here is read-only. Nothing signs, sends, or broadcasts.
 
 You do not need to know Solidity. You need a free Alchemy account and an agent that supports MCP.
 
-## Quick start (about 10 minutes)
+## Quick start (about 30 minutes)
 
-1. **Connect** your agent to `https://mcp.alchemy.com/mcp` and create one Alchemy app. Follow [SETUP.md](SETUP.md).
-2. **Open this repo** in your agent: run `claude` from the repo folder, or open the folder in Cursor or VS Code. The prompts reference files by path, so the agent needs to be inside the repo.
-3. **Run Lab 0**: paste the prompt from [labs/00-hello-mcp](labs/00-hello-mcp/README.md). Five tool calls that prove the connection works.
-4. **Run Lab 1**: paste a prompt from [labs/01-before-you-sign](labs/01-before-you-sign/README.md). A real pre-sign safety report on a wallet, a mined transaction, or unsigned calldata.
+1. **Get the repo**:
+
+   ```bash
+   git clone https://github.com/gabriel-dg/alchemy-MCP-labs.git
+   cd alchemy-MCP-labs
+   ```
+
+2. **Connect** your agent to `https://mcp.alchemy.com/mcp` and pick one Alchemy app. Follow [SETUP.md](SETUP.md). Run the connect command from inside the repo folder, or the server may not be visible when you open it.
+3. **Open the repo** in your agent: run `claude` (or your agent's equivalent) from the repo folder, or open the folder in Cursor, VS Code, or another MCP client. The prompts reference files by path, so the agent needs to be inside the repo.
+4. **Run Lab 0**: paste the prompt from [labs/00-hello-mcp](labs/00-hello-mcp/README.md). Five tool calls that prove the connection works.
+5. **Run Lab 1**: paste a prompt from [labs/01-before-you-sign](labs/01-before-you-sign/README.md). A real pre-sign safety report on a wallet, a mined transaction, or unsigned calldata.
+6. **Run Lab 2**: paste a prompt from [labs/02-contract-inspector](labs/02-contract-inspector/README.md) on an address Lab 1 told you to look at. That loop is the point of the pair.
 
 ## Labs
 

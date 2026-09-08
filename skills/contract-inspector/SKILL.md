@@ -2,7 +2,7 @@
 name: contract-inspector
 description: Read-only identity check for any EVM address via Alchemy MCP. Use when the user asks who is this address, what is this contract, is this spender legit, is this token real, inspect this contract, or after a before-you-sign REVIEW names an unknown address. Returns type, identity, trust signals, red flags, and an ESTABLISHED / UNCERTAIN / RED FLAGS / NOT A CONTRACT assessment.
 metadata:
-  version: "0.1.1"
+  version: "0.1.3"
   type: workflow
 ---
 
@@ -96,7 +96,7 @@ Interpret the three outcomes:
 
 On other networks skip the address comparison and keep the native-asset rule.
 
-If `getTokenMetadata` errors with "expected a valid token contract address", or returns empty name and symbol with null decimals: not an ERC-20. Call `getContractMetadata`. If `tokenType` is `ERC721` or `ERC1155`: **NFT contract**. Record `isSpam`, `spamClassifications`, and `openSeaMetadata.safelistRequestStatus`, then call `isSpamContract` once. Otherwise: **non-token contract**; still report `isSpam` and `spamClassifications` if they are set. Non-token contracts stay unnamed on Free; `getContractMetadata` may still return a name from OpenSea ingestion, and bytecode strings or recognisable event topics may hint at what it is. Report such hints as "inferred", never as identity.
+If `getTokenMetadata` errors with "expected a valid token contract address", or returns empty name and symbol with null decimals: not an ERC-20. Call `getContractMetadata`. If `tokenType` is `ERC721` or `ERC1155`: **NFT contract**. Record `isSpam`, `spamClassifications`, and `openSeaMetadata.safelistRequestStatus`, then call `isSpamContract` once. Otherwise: **non-token contract**; still report `isSpam` and `spamClassifications` if they are set. Non-token contracts stay unnamed on Free; `getContractMetadata` may still return a name from OpenSea ingestion, and bytecode strings or recognisable event topics may hint at what it is. Report such hints as "inferred", never as identity. **Do not name a vendor, product, or company unless you verified it** — a bytecode pattern that resembles a known implementation is not verification, and a hedged brand name is still the name a reader will remember. Describe the shape ("a smart-account implementation with session-key privileges") and leave the attribution to a block explorer.
 
 ## Step 5: age and activity
 
@@ -112,6 +112,8 @@ If `getTokenMetadata` errors with "expected a valid token contract address", or 
 **Burst pattern.** Tokens only, on their own transfer history: first and last transfer within 24 hours of each other and zero events in the 5-block window. It counts no matter how long ago the burst was. A non-token contract that once received someone else's airdrop is not a burst.
 
 **Balance.** `ethGetBalance`, reported in ETH to 4 decimals. Contracts holding ETH is neither good nor bad.
+
+**Implementation contracts are a blind spot.** This applies whenever the address looks like code that runs in someone else's context rather than its own: an EIP-7702 delegate target, a proxy implementation, a smart-account or library contract. You do not need to have been told; the shape is enough, and Step 4's bytecode hints (`validateUserOp`, `isValidSignature`, receiver hooks, a privilege or nonce map) are the usual tell. Such a contract executes under `DELEGATECALL`, so its logs, transfers and balance appear at the calling account's address and never at this one. Zero events, zero balance and a lone unsolicited airdrop as the only inbound transfer are exactly what a correctly functioning implementation looks like. Say so in the report and give these signals no weight in either direction. They must not push the assessment toward RED FLAGS. This exception is about *quiet* signals only: it never softens a counterfeit symbol, a spam classification, or a burst pattern, and it does not apply to tokens.
 
 ## Assessment
 

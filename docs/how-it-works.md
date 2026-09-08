@@ -44,7 +44,7 @@ You never write code. The skill tells the agent which tools to call and in what 
 
 ## Tool map
 
-The server exposes about 190 tools. Grouped by family, with the ones the labs use in bold:
+The server exposes 173 tools across 160+ networks, checked on 2026-09-08 from a Free-tier connection. Alchemy keeps adding networks, so call `list_chains` for today's list rather than relying on a number written down here. Grouped by family, with the ones the labs use in bold:
 
 | Family | Examples | Notes |
 |--------|----------|-------|

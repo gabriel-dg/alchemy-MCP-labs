@@ -5,14 +5,18 @@ Time: about 5 minutes. You will create a free Alchemy account and app, connect y
 ## Prerequisites
 
 - An Alchemy account. Free is enough for every lab here. Sign up at https://dashboard.alchemy.com
-- One of these agents: Claude Code, Cursor, VS Code with Copilot agent mode, Codex CLI, or Claude Desktop
+- An agent that speaks MCP. Claude Code, Cursor, VS Code with Copilot agent mode, Codex CLI and Claude Desktop have step-by-step instructions below; any other MCP client works too
 - A browser for the one-time OAuth login
 
 You do **not** need an API key. The hosted server authenticates with OAuth and uses the app you select. Never paste an API key into an MCP config file.
 
-## Step 1: create an Alchemy app
+## Step 1: create or pick an Alchemy app
 
 An "app" is a project in the Alchemy dashboard. The MCP server needs one to route your requests.
+
+**Already have one?** If any of your apps has **Ethereum Mainnet** enabled, reuse it and skip to Step 2. You do not need a fresh app for these labs.
+
+Otherwise:
 
 1. Open https://dashboard.alchemy.com and sign in
 2. Click **Apps**, then **Create new app**
@@ -20,7 +24,7 @@ An "app" is a project in the Alchemy dashboard. The MCP server needs one to rout
 4. Make sure **Ethereum Mainnet** is enabled for it. Labs default to `eth-mainnet`. You can enable more networks later.
 5. Save. You do not need to copy the API key.
 
-If you already have an app that includes Ethereum Mainnet, you can reuse it.
+The dashboard shows the app's API key on this screen. Ignore it: the hosted MCP server authenticates over OAuth and never asks for one.
 
 ## Step 2: connect your agent
 
@@ -32,11 +36,15 @@ https://mcp.alchemy.com/mcp
 
 ### Claude Code
 
+Run this **in your terminal, from inside the cloned repo folder**, with Claude Code closed:
+
 ```bash
 claude mcp add --transport http alchemy https://mcp.alchemy.com/mcp
 ```
 
-Start a new session, run `/mcp`, choose `alchemy`, and pick **Authenticate**. A browser window opens for the Alchemy login. When it says connected, you are done.
+`claude mcp add` defaults to `--scope local`, which registers the server for the directory you run it in. Run it anywhere else and `/mcp` will show no `alchemy` server when you open the repo. Add `-s user` instead if you want the connection available in every project.
+
+Then start the agent from the repo folder with `claude`, run `/mcp`, choose `alchemy`, and pick **Authenticate**. A browser window opens for the Alchemy login. When it says connected, you are done. If Claude Code was already running when you added the server, restart it.
 
 When you open this repo, Claude Code picks up `.claude/settings.json`, which pre-approves the read-only Alchemy tools the labs use. You will not be asked to confirm each call. Paid and account-mutating tools are not on the list.
 
@@ -83,6 +91,12 @@ codex mcp add alchemy --url https://mcp.alchemy.com/mcp
 
 Claude Desktop connects to remote MCP servers through the UI, not the JSON config file (that file is for local stdio servers only). Open **Settings**, **Connectors**, **Add custom connector**, name it `alchemy`, paste the URL, and complete the login.
 
+### Any other MCP client
+
+The labs need only two things from an agent: an MCP client that can reach a **remote HTTP server with OAuth**, and the ability to **read files in this repo by path**. Point your client at `https://mcp.alchemy.com/mcp` with no API key and no headers.
+
+Field names differ between clients, so check your client's own docs rather than copying a block above. Cursor uses `url`, VS Code uses `servers` plus `type`, and Antigravity CLI uses `serverUrl` in `.agents/mcp_config.json` and rejects `url`. Without a `.claude/` folder you will approve tool calls manually, and you run the full prompts from each skill's `PROMPTS.md` instead of slash commands. Everything else works the same.
+
 ## Step 3: select an app
 
 Most tools need an app selected first. In your agent, say:
@@ -116,12 +130,12 @@ Network ids look like `eth-mainnet`, `base-mainnet`, `arb-mainnet`, `polygon-mai
 
 | Symptom | Likely fix |
 |---------|-----------|
-| `alchemy` server missing or no tools listed | Check the URL is exactly `https://mcp.alchemy.com/mcp`. Re-run the OAuth login. Restart the agent. |
+| `alchemy` server missing or no tools listed | Claude Code: `claude mcp add` registers the server for the directory you ran it in, so re-run it from the repo folder (or with `-s user`). Any client: check the URL is exactly `https://mcp.alchemy.com/mcp`, re-run the OAuth login, restart the agent. |
 | Tool calls fail right after connecting | You skipped **Step 3**. Say "select an Alchemy app". |
 | "app does not support network" or empty data on another chain | Enable that network for the app in the dashboard, or select a different app. |
 | 400 error mentioning payg / upgrade / billing | Paid feature. The lab continues without it. See Free vs PAYG above. |
 | Rate limit or throttling | Free apps have compute-unit limits. Wait a moment and retry, or check usage in the dashboard. |
-| ENS name fails to resolve | The skill computes the namehash with `web3Sha3` and calls the ENS registry. See the recipe in [skills/before-you-sign/SKILL.md](skills/before-you-sign/SKILL.md). |
+| ENS name fails to resolve | The skill computes the namehash with `web3Sha3` and reads the ENS registry with two `ethCall`s, which works on every tier. See the recipe in [skills/before-you-sign/SKILL.md](skills/before-you-sign/SKILL.md). |
 
 ## Docs
 

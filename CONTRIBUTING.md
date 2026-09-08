@@ -36,7 +36,7 @@ Create `skills/<name>/` with:
 
 ### Reference runs
 
-Files in `examples/` are cold runs: give a fresh agent only the prompt from `PROMPTS.md`, let it follow `SKILL.md`, and paste its report plus its raw call log. Ask the agent to list what was unclear in the skill and fix the skill before shipping. Start each file with a header line that states the run date. Chain state changes; readers need to know what to expect to differ.
+Files in `examples/` are cold runs: give a fresh agent only the prompt from `PROMPTS.md`, let it follow `SKILL.md`, and paste its report plus its raw call log. Ask the agent to list what was unclear in the skill and fix the skill before shipping. Start each file with a header line that states the run date and the skill version it ran against, for example `Cold run, 2026-09-07, on skill v0.3.0`. Without the version, a reader comparing a current run against an older example cannot tell a regression from a shortcut the skill has since gained. Chain state changes; readers need to know what to expect to differ.
 
 ## Checklist before opening a PR
 

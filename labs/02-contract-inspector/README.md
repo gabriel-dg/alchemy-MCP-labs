@@ -25,11 +25,11 @@ The playbook the agent follows is [skills/contract-inspector/SKILL.md](../../ski
 
 - [SETUP.md](../../SETUP.md) done and [Lab 0](../00-hello-mcp/README.md) passed
 - This repo open in your agent
-- Claude Code users: the repo's settings pre-approve every tool this lab uses
+- Claude Code users: the repo's `.claude/settings.json` pre-approves every tool this lab uses, so you will not be asked to confirm each call. Other agents may ask once per tool; say yes.
 
 ## Run it
 
-Pick one. Paste the block. The agent selects an app if needed, makes 8 to 15 tool calls, and prints the report.
+Pick one. Paste the block. The agent selects an app if needed, makes the tool calls, and prints the report. A contract takes 12 to 15 calls. An address with no code (E) takes about 4: the skill's not-a-contract branch reads code, nonce, balance and the first transfer, then stops.
 
 ### A. Uniswap Permit2
 
@@ -100,9 +100,9 @@ Values observed on 2026-09-07. Full cold-run reports with every tool call are in
 
 **B, USDC.** Proxy. The EIP-1967 slot is empty but the legacy slot holds the implementation `0x4350…02dd`. The probe decodes `name()` as "USD Coin" through a `DELEGATECALL`. Token metadata with logo, price about one dollar, first transfer 2018. Expected: **ESTABLISHED**, with the proxy explained.
 
-**C, counterfeit ETH.** Contract, no proxy, no ABI match. Token metadata says name "ETH", symbol "ETH", no logo. No price. First and last transfers both on 2026-06-24, two hours apart, nothing since. Expected: **RED FLAGS** for a native-asset symbol on an ERC-20 plus a burst pattern.
+**C, counterfeit ETH.** Contract, no proxy, unverified: `name()` returns data that Alchemy cannot decode, so the function exists with no Etherscan ABI behind it. Token metadata says name "ETH", symbol "ETH", no logo. No price. First and last transfers both on 2026-06-24, two hours apart, nothing since. Expected: **RED FLAGS** for a native-asset symbol on an ERC-20 plus a burst pattern.
 
-**D, the delegate.** Contract, no proxy, no ABI match on three probes. Not a token. Zero events in the window. First inbound transfer 2025-10. Expected: **UNCERTAIN**: it exists and is used, but nothing on Free lets the agent say what it is.
+**D, the delegate.** Contract, no proxy, no ABI match on three probes, so "could not confirm" rather than unverified. Not a token. Zero events in the window. First inbound transfer 2025-10. Expected: **UNCERTAIN**: it exists and is used, but nothing on Free lets the agent say what it is. The quiet activity signals are not evidence against it — a delegate executes in the delegating account's context, so its own address is expected to look idle.
 
 **E, the spender.** Code `0x`, nonce 0, and it holds about 5.7 ETH that people have sent to it by mistake. Expected: **NOT A CONTRACT**.
 
@@ -110,7 +110,7 @@ Values observed on 2026-09-07. Full cold-run reports with every tool call are in
 
 - **Type** is the structural answer. Contract, proxy, delegated account, or nothing. Read it first.
 - **Signals** is the evidence. Each row is one tool call. When the assessment surprises you, this table says why.
-- **Verified source** is a heuristic. The probe tries three common functions. A contract that has none of them shows "no ABI match" even if its source is public. Treat "no match" as "could not confirm", not "unverified".
+- **Verified source** is a heuristic, and it has two distinct outcomes. When a probe *returns data* but Alchemy decodes nothing, the function exists and Etherscan has no ABI for it: that is a genuine **unverified**. When all three probes come back empty, you have learned only that `name()`, `owner()` and `DOMAIN_SEPARATOR()` are absent, which a verified contract with a different ABI would also produce: report that as **could not confirm**. Scenario C is the first case, scenario D the second.
 - **Assessment.** ESTABLISHED means widely used and verifiable, not safe. UNCERTAIN means the Free-tier signals ran out; a block explorer is the next step. RED FLAGS means at least one signal is the shape of a scam. NOT A CONTRACT means an approval or a send goes to a person, not to code.
 - **What to do next** is the one sentence to act on.
 
@@ -132,6 +132,6 @@ Values observed on 2026-09-07. Full cold-run reports with every tool call are in
 |---------|-----|
 | `ethGetLogs` fails with a block-range message | The Free tier allows a 10-block range. The skill uses 5. If the agent widened it, tell it to use latest minus 4 to latest. |
 | `getTokenMetadata` errors with "expected a valid token contract" | Expected for non-token contracts. The skill falls back to NFT metadata, then to "non-token contract". |
-| Verified-source probe says no match on a contract you know is verified | The contract has none of `name()`, `owner()`, `DOMAIN_SEPARATOR()`. Report it as "could not confirm". |
+| Verified-source probe says no match on a contract you know is verified | The contract has none of `name()`, `owner()`, `DOMAIN_SEPARATOR()`, so the probe cannot see its ABI. Report it as "could not confirm", not "unverified". |
 | Huge bytecode floods the output | Server truncation is normal. Non-empty means "has code". The agent should not paste bytecode into the report. |
 | Agent cannot find the skill file | The repo is not the working directory. Open the repo folder in your agent, or paste the contents of `SKILL.md` into the prompt. |

@@ -1,4 +1,4 @@
-> Cold run, Branch A, 2026-09-07. An agent was given only the Scenario A prompt from `PROMPTS.md` and followed `SKILL.md`. Report reproduced as written, lightly trimmed. Balance, page-1 lists, and NFT count change over time; the resolved address, the delegation, and the verdict should not while the delegation stays in place.
+> Cold run, Branch A, 2026-09-07, on a pre-v0.3.0 skill. An agent was given only the Scenario A prompt from `PROMPTS.md` and followed `SKILL.md`. Report reproduced as written, lightly trimmed. Balance, page-1 lists, and NFT count change over time; the resolved address, the delegation, and the verdict should not while the delegation stays in place.
 
 # Before you sign
 

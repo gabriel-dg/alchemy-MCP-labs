@@ -11,3 +11,5 @@ One report per scenario, produced by an agent that was given only the prompt fro
 | [not-a-contract.md](not-a-contract.md) | E. `0x1111…1111`, the spender from Lab 1 | NOT A CONTRACT |
 
 Use them to compare against your own output, and to see the tool call order without running anything.
+
+**Skill versions move; these files do not.** Each header states the run date and, where recorded, the skill version it ran against. A current run may legitimately make *fewer* calls than the example beside it, because the skill has since gained a documented shortcut or a stop-early rule. Compare addresses, hashes, verdicts and the shape of the report. Do not treat a difference in call count as a fault in your run.

@@ -2,7 +2,7 @@
 name: before-you-sign
 description: Read-only pre-sign briefing via Alchemy MCP. Use when the user says before I sign, simulate this transaction, check this approval, inspect this hash, is this calldata safe, or wants a wallet or ENS briefing. Returns asset changes, risk flags, and an OK / REVIEW / DO NOT SIGN verdict.
 metadata:
-  version: "0.3.0"
+  version: "0.3.1"
   type: workflow
 ---
 
@@ -28,7 +28,7 @@ Produce a read-only briefing with Alchemy MCP tools. Never send, sign, or broadc
 
 **NFTs:** `getNFTsForOwner`, `getNFTsByAddress`
 
-Do not invent tool names outside this list. There is no `resolveEnsName` on the hosted server. Independent calls may run in parallel; list them in the report in the order they were issued.
+Do not invent tool names outside this list. If the server exposes an ENS resolution tool, you may use it too; see the ENS section below. Independent calls may run in parallel; list them in the report in the order they were issued.
 
 ## Workflow
 
@@ -52,7 +52,9 @@ Do not invent tool names outside this list. There is no `resolveEnsName` on the 
 
 ## ENS resolution recipe
 
-Hosted MCP has no ENS tool. Resolve with `web3Sha3` for hashing and `ethCall` for the registry. Never guess a hash or an address.
+**Check the tool list first.** If your connection exposes a dedicated ENS resolution tool, use it and skip this recipe.
+
+If it does not, ENS still resolves cleanly: the server's JSON-RPC primitives are enough on their own. Use `web3Sha3` for the namehash and two `ethCall`s to the ENS registry. This path works on every tier and needs nothing beyond the tools already allowed above, which makes it a good demonstration of how far `web3Sha3` plus `ethCall` will take you. Never guess a hash or an address.
 
 The `.eth` parent node is a constant and may be used directly without recomputing:
 

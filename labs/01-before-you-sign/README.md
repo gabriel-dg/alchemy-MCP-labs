@@ -22,7 +22,7 @@ The playbook the agent follows is [skills/before-you-sign/SKILL.md](../../skills
 
 ## Run it
 
-Pick one scenario. Paste the block. The agent selects an app if needed, makes 6 to 12 tool calls, and prints the report.
+Pick one scenario. Paste the block. The agent selects an app if needed, makes the tool calls, and prints the report. Cost varies by branch: explaining a mined transaction (C) takes about 6 calls, simulating calldata (B) about 11, and a wallet briefing (A, A2) 15 to 19, because it resolves the name and then reads tokens, transfers and NFTs.
 
 ### A. Wallet briefing for `vitalik.eth`
 
@@ -84,7 +84,7 @@ Every run produces the same report shape:
 - Gaps
 ```
 
-Values observed on 2026-09-07. Each scenario was run cold by an agent that saw only the prompt and the skill file. The full reports, with every tool call and its parameters, are in [skills/before-you-sign/examples/](../../skills/before-you-sign/examples/). A run takes 10 to 20 tool calls and one to three minutes.
+Values observed on 2026-09-07. Each scenario was run cold by an agent that saw only the prompt and the skill file. The full reports, with every tool call and its parameters, are in [skills/before-you-sign/examples/](../../skills/before-you-sign/examples/). A run takes 6 to 19 tool calls and one to three minutes, depending on the branch. Those counts are from cold runs, one scenario per session. Running several scenarios back to back in one session is cheaper, because the agent reuses reads it has already made and says so under Gaps.
 
 **Scenario A** resolves `vitalik.eth` to `0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045` through `web3Sha3` and two `ethCall`s. `ethGetCode` returns `0xef01005a7fc1…96f6d`, an EIP-7702 delegation to `0x5a7fc11397e9a8ad41bf10bf13f22b0a63f96f6d`. Balance about 6.7 ETH. Page 1 of transfers is vanity spam tokens named "Vitalik" and "<3" sent to the zero address. Expected verdict: **REVIEW**, because of the delegation. That is not an accusation. It means "look at who the delegate is before trusting a signature from this account".
 
