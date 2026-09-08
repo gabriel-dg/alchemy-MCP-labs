@@ -36,6 +36,10 @@ You never write code. The skill tells the agent which tools to call and in what 
 
 **Pagination and "page 1 only".** Token, NFT, and transfer lists are paginated and often sorted by address, not by value. The first page of a famous wallet is usually airdropped spam tokens with vanity addresses. The skill labels these results "page 1 only" and never concludes that a token is absent because it did not appear on page 1.
 
+**Multi-chain tools.** Most tools take one `network`. The token balance tools take a `networks` list instead and return one flat array with a `network` field per row, natives first. Lab 3 uses that to read five chains in one call. Two quirks: a network the app lacks is dropped from the response without an error, and Polygon answers as `matic-mainnet` whatever id you sent.
+
+**Native vs ERC-20.** ETH on Ethereum, Base, Arbitrum and OP Mainnet is the chain's own currency, with no contract address; the token tools show it as a row with `tokenAddress` `null`. POL on Polygon is the same, but Polygon also exposes it through a precompile at `0x…1010`, so it shows up twice. WETH and the stablecoins are ERC-20 contracts and have an address per chain; the same symbol at a different address on another chain is a different contract.
+
 **Simulation vs trace.** `simulateAssetChanges` and `simulateExecution` run a transaction against current state without sending it and return the balance changes and events it would produce. They work on Free and are the core of Lab 1. Traces (`traceTransaction`, `debugTraceTransaction`) replay a mined transaction step by step and are paid.
 
 **ENS and namehash.** `vitalik.eth` is an ENS name. Resolving it means calling the ENS registry contract with a 32-byte `namehash` of the name. The hash is keccak256, which language models cannot compute reliably, so the skill computes it with the server's `web3Sha3` tool and then makes two `ethCall`s. The full recipe is in the skill.
@@ -51,7 +55,8 @@ The server exposes 173 tools across 160+ networks, checked on 2026-09-08 from a 
 | Admin | **`ping`**, **`list_apps`**, **`select_app`**, **`list_chains`**, `get_app`, `get_usage_summary` | `select_app` first. Do not use `create_app` or webhook tools in labs |
 | JSON-RPC reads | **`ethBlockNumber`**, **`ethGetBalance`**, **`ethGetCode`**, **`ethGetStorageAt`**, **`ethGetTransactionCount`**, **`ethCall`**, **`ethGetTransactionByHash`**, **`ethGetTransactionReceipt`**, **`ethGetLogs`**, `ethGasPrice`, **`web3Sha3`** | Standard Ethereum RPC on any EVM network. Logs are capped at a 10-block range on Free |
 | Transfers | **`getAssetTransfers`** | History of ETH, ERC-20, ERC-721, ERC-1155 movements for an address or a token contract |
-| Tokens | **`getTokenBalancesByAddress`**, `getTokensByAddress`, **`getTokenMetadata`**, **`getTokenAllowance`**, **`getTokenPricesByAddress`**, `getTokenPricesBySymbol` | Prices may not exist for every token |
+| Tokens | **`getTokenBalancesByAddress`**, **`getTokensByAddress`**, **`getTokenMetadata`**, **`getTokenAllowance`** | Both balance tools take a `networks` list and answer for every chain in one request. `getTokensByAddress` adds metadata and prices per row |
+| Prices | **`getTokenPricesByAddress`**, **`getTokenPricesBySymbol`**, **`getHistoricalTokenPrices`** | USD from Alchemy's feed. History at 5-minute, hourly or daily intervals, up to a year of daily points. Prices may not exist for every token |
 | NFTs | **`getNFTsForOwner`**, **`getContractMetadata`**, `getNFTMetadata`, `getOwnersForContract`, **`isSpamContract`**, `getFloorPrice` | Spam filters are paid |
 | Simulation | **`simulateAssetChanges`**, **`simulateExecution`**, `simulateAssetChangesBundle` | Free. Read-only preview of an unsigned transaction |
 | Trace / debug | `traceTransaction`, `traceCall`, `debugTraceTransaction`, `debugTraceCall` | Paid |

@@ -28,6 +28,8 @@
       "mcp__alchemy__getTokenAllowance",
       "mcp__alchemy__getTokenMetadata",
       "mcp__alchemy__getTokenPricesByAddress",
+      "mcp__alchemy__getTokenPricesBySymbol",
+      "mcp__alchemy__getHistoricalTokenPrices",
       "mcp__alchemy__getContractMetadata",
       "mcp__alchemy__isSpamContract",
       "mcp__alchemy__getNFTsForOwner",

@@ -7,6 +7,7 @@ Educational labs that showcase the Alchemy MCP server. Humans read `labs/`, agen
 - Lab 0 (connection check): follow `labs/00-hello-mcp/README.md`
 - Lab 1 (before-you-sign): read `skills/before-you-sign/SKILL.md` and follow it exactly. Prompts are in `skills/before-you-sign/PROMPTS.md`. Reference runs are in `skills/before-you-sign/examples/`
 - Lab 2 (contract-inspector): read `skills/contract-inspector/SKILL.md` and follow it exactly. Same layout for prompts and examples
+- Lab 3 (multichain-brief): read `skills/multichain-brief/SKILL.md` and follow it exactly. Same layout. This lab queries five networks by default; the network list is printed in the report
 
 ## Rules for every lab
 

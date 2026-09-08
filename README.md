@@ -19,7 +19,7 @@ Everything here is read-only. Nothing signs, sends, or broadcasts.
 
 You do not need to know Solidity. You need a free Alchemy account and an agent that supports MCP.
 
-## Quick start (about 30 minutes)
+## Quick start (about 40 minutes)
 
 1. **Get the repo**:
 
@@ -33,6 +33,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 4. **Run Lab 0**: paste the prompt from [labs/00-hello-mcp](labs/00-hello-mcp/README.md). Five tool calls that prove the connection works.
 5. **Run Lab 1**: paste a prompt from [labs/01-before-you-sign](labs/01-before-you-sign/README.md). A real pre-sign safety report on a wallet, a mined transaction, or unsigned calldata.
 6. **Run Lab 2**: paste a prompt from [labs/02-contract-inspector](labs/02-contract-inspector/README.md) on an address Lab 1 told you to look at. That loop is the point of the pair.
+7. **Run Lab 3**: paste a prompt from [labs/03-multichain-brief](labs/03-multichain-brief/README.md). The same address on five chains, in dollars, from one call.
 
 ## Labs
 
@@ -41,6 +42,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 | 0 | [hello-mcp](labs/00-hello-mcp/) | 5 min | Connection check. Select an app, list networks, read a block number and a balance. |
 | 1 | [before-you-sign](labs/01-before-you-sign/) | 15 min | Preflight a wallet (ENS or address), inspect a mined transaction, or **simulate unsigned calldata** and get an **OK / REVIEW / DO NOT SIGN** verdict. Runs on the Free tier. |
 | 2 | [contract-inspector](labs/02-contract-inspector/) | 10 min | Answer "what is this address?": type, proxy, verified source, token identity, price, age, activity, and an **ESTABLISHED / UNCERTAIN / RED FLAGS / NOT A CONTRACT** assessment. The follow-up to every Lab 1 REVIEW. |
+| 3 | [multichain-brief](labs/03-multichain-brief/) | 10 min | One call, every chain, in dollars. Native and token balances for an address or ENS name across Ethereum, Base, Arbitrum, OP Mainnet and Polygon, a USD total with a coverage line, a watchlist for tokens page 1 cannot see, and the 7-day price change. |
 
 ## What a lab looks like
 
@@ -53,9 +55,11 @@ labs/                  walkthroughs for humans (start here)
   00-hello-mcp/
   01-before-you-sign/
   02-contract-inspector/
+  03-multichain-brief/
 skills/                playbooks for agents (what a lab runs)
   before-you-sign/
   contract-inspector/
+  multichain-brief/
 docs/how-it-works.md   how the pieces fit, glossary, tool map
 SETUP.md               connect your agent, create an app, Free vs paid
 CLAUDE.md              entry point for Claude Code when it opens this repo
@@ -64,11 +68,10 @@ CONTRIBUTING.md        how to add a lab or a skill
 
 ## Roadmap
 
-Planned, not yet in the repo. Every tool below was probed on the Free tier on 2026-09-07 and works. Labs 1 and 2 are the **safety** track; the next three are the **explore** track, each showing a tool family the repo has not touched yet; the last two are **operate**.
+Planned, not yet in the repo. Every tool below was probed on the Free tier on 2026-09-07 and works. Labs 1 and 2 are the **safety** track; Lab 3 opened the **explore** track, and the next two continue it, each showing a tool family the repo has not touched yet; the last two are **operate**.
 
 | # | Lab | One-line hook | Tool family it introduces |
 |---|-----|---------------|---------------------------|
-| 3 | **multichain-brief** | One call, every chain, in dollars. An address or ENS, native and token balances across Ethereum and its L2s with USD values, plus a 7-day price change. | Multi-chain token API, price feeds, historical prices |
 | 4 | **nft-collection-brief** | Is this NFT worth what they say? Collection metadata, floor price, holder count, and the rarity of one token id. | NFT API: floor price, owners, attributes, rarity |
 | 5 | **solana-wallet-brief** | The Lab 1 wallet briefing for a Solana address: balance, assets via the Digital Asset Standard, recent signatures. Needs Solana enabled on your app. | Solana RPC and DAS |
 | 6 | **allowance-check** | Which well-known spenders can already move my tokens? A matrix of your address against a list of known routers and marketplaces. Honest scope: unknown spenders need event history, which Free caps at 10 blocks. | Allowance reads at scale |
