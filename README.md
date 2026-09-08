@@ -26,7 +26,7 @@ Nobody owns that address. Its nonce is zero, so it has never sent a transaction.
 
 Real [Lab 3](labs/03-multichain-brief/) output, observed 2026-09-08. Six tool calls, about twenty seconds. **No code, no API key, no RPC URLs.**
 
-<!-- demo clip goes here: ![Lab 3 running](docs/assets/lab-03.gif) - recording script in docs/demo-clip.md -->
+<!-- demo clip goes here: ![Lab 3 running](docs/assets/lab-03.gif) - see "Recording a clip" in CONTRIBUTING.md -->
 
 ## Why bother
 
@@ -98,7 +98,6 @@ skills/                playbooks for agents (what a lab runs)
   contract-inspector/
   multichain-brief/
 docs/how-it-works.md   how the pieces fit, glossary, tool map
-docs/demo-clip.md      how to record the 20-second clip the README links
 SETUP.md               connect your agent, create an app, Free vs paid
 CLAUDE.md              entry point for Claude Code when it opens this repo
 CONTRIBUTING.md        how to add a lab or a skill

@@ -38,6 +38,22 @@ Create `skills/<name>/` with:
 
 Files in `examples/` are cold runs: give a fresh agent only the prompt from `PROMPTS.md`, let it follow `SKILL.md`, and paste its report plus its raw call log. Ask the agent to list what was unclear in the skill and fix the skill before shipping. Start each file with a header line that states the run date and the skill version it ran against, for example `Cold run, 2026-09-07, on skill v0.3.0`. Without the version, a reader comparing a current run against an older example cannot tell a regression from a shortcut the skill has since gained. Chain state changes; readers need to know what to expect to differ.
 
+## Recording a clip
+
+The root `README.md` has a placeholder for a short screen recording at `docs/assets/lab-03.gif`. If you record one, swap the HTML comment for the image line.
+
+Record Lab 3 scenario B, the run the README opens with: one line of input, five chains, a dollar total, nothing to explain. Roughly twenty seconds, in a fresh terminal at about 100x30, font two sizes up from normal, with an app already selected so the run does not stop to ask which one.
+
+Hold two beats on an empty prompt, type the command live rather than pasting, let the tool calls scroll past unedited, and finish holding three full seconds on the total. Those tool names going by are the pitch: do not cut or blur them. No title card, no music, no voiceover, and no real wallet, yours or anyone else's. `0x1111...1111` has no owner, which is why it is the one on the front page.
+
+Keep it under 3MB so GitHub renders it inline:
+
+```bash
+ffmpeg -i lab-03.mov -vf "fps=12,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen[p];[b][p]paletteuse" -loop 0 docs/assets/lab-03.gif
+```
+
+If it comes out too big, drop to `fps=10` before you drop the width. Unreadable tool names defeat the purpose.
+
 ## Checklist before opening a PR
 
 - [ ] Every tool name in the new files exists on the server
