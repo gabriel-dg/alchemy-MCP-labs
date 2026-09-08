@@ -59,8 +59,8 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 1. **Get the repo**:
 
    ```bash
-   git clone https://github.com/gabriel-dg/alchemy-MCP-labs.git
-   cd alchemy-MCP-labs
+   git clone https://github.com/gabriel-dg/alchemy-mcp-labs.git
+   cd alchemy-mcp-labs
    ```
 
 2. **Connect** your agent to `https://mcp.alchemy.com/mcp` and pick one Alchemy app. Follow [SETUP.md](SETUP.md). Run the connect command from inside the repo folder, or the server may not be visible when you open it.
