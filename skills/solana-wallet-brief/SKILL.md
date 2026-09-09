@@ -115,6 +115,8 @@ On mainnet, in the same batch, `solana_getPriorityFeeEstimate` with `accountKeys
 - The **native row** comes first, `tokenAddress` `null`, empty metadata, a `tokenPrices` entry. SOL = `tokenBalanceDecimal` / 10^9. USD = SOL x price. If `tokenPrices` is empty, call `getTokenPricesBySymbol` with `["SOL"]`.
 - **Token rows** follow, sorted by mint address, not by value. This is **page 1 only**: the MCP tool exposes no `pageKey` parameter, so there is no page 2. It covers both token programs: a mint held under Token-2022 appears here like any other. The first page of a busy wallet is mostly airdropped spam. A token missing from page 1 is not evidence the wallet lacks it; use the watchlist in Step 3b.
 
+Only priced holdings and Step 3b watchlist rows go in the holdings table. Every other row is counted in Noise and never listed as a holding. If page 1 has no priced token, write one line instead of a table: "No priced token on page 1. See Noise."
+
 Classify every token row into exactly one bucket:
 
 - **Priced holding:** `tokenBalanceDecimal` > 0 and `tokenPrices` non-empty. Goes in the holdings table with balance = `tokenBalanceFormatted`, USD = balance x price.
@@ -187,7 +189,7 @@ Bold labels as bullets, Markdown tables for balances, bare tool names. Omit the 
 - **Observed:** date, slot, epoch and progress, price lastUpdatedAt
 - **Account type:** wallet | program | token account of … | token mint | program-owned account (owner …)
 - **SOL balance** (table: SOL, price, USD)
-- **Token holdings** (table: token, mint, balance, price, USD, note) with `page 1` or `watchlist` in the note
+- **Token holdings** priced and watchlist rows only (table: token, mint, balance, price, USD, note) with `page 1` or `watchlist` in the note; if page 1 has no priced token, one line pointing to Noise
 - **Total:** USD, with the coverage line
 - **Recent activity** (table: when UTC, signature, status, memo)
 - **Last transaction, decoded:** signature, when, status, fee, signers and whether the briefed address is one, SOL moves, token moves, programs invoked, one plain sentence
