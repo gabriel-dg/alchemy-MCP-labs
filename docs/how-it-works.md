@@ -44,6 +44,12 @@ You never write code. The skill tells the agent which tools to call and in what 
 
 **ENS and namehash.** `vitalik.eth` is an ENS name. Resolving it means calling the ENS registry contract with a 32-byte `namehash` of the name. The hash is keccak256, which language models cannot compute reliably, so the skill computes it with the server's `web3Sha3` tool and then makes two `ethCall`s. The full recipe is in the skill.
 
+**Solana accounts.** Solana has no `ethGetCode`. Every account has an `owner` program, and the owner tells you what the account is: the System program owns wallets, the Token or Token-2022 program owns token accounts and mints, and anything else is a program-owned account such as a PDA or a stake account. A wallet does not hold tokens directly; it owns one token account per mint, and each of those holds a small SOL deposit called rent that comes back when the account is closed. There are two token programs, and a query against only the classic one silently misses Token-2022 balances. Lab 4 covers this.
+
+**Lamports and signatures.** 1 SOL is 10^9 lamports. Transactions are identified by their first signature, an 88-character base58 string, not by a hash. A transaction's balance changes are recorded as `preBalances` and `postBalances` for every account it touched, plus the same for token accounts, so "what did this transaction do" is a subtraction, not a decode.
+
+**Compressed NFTs.** A regular Solana NFT is a token account plus a metadata account, and costs real rent. A compressed NFT is a leaf in a Merkle tree owned by the Bubblegum program; only the tree root lives onchain, and the leaf's data is served by an indexer through the Digital Asset Standard (DAS) API. `getAssetProof` returns the hashes that prove a leaf is in the tree, which a program checks before it lets the asset move. That is why minting one costs a fraction of a cent.
+
 **EIP-7702.** Since the Pectra upgrade an externally owned account can delegate its code to a contract. `ethGetCode` on such an address returns 23 bytes starting with `0xef0100` followed by the delegate address. Signatures from that account are then interpreted by the delegate. The skill flags this as REVIEW so you look at who the delegate is. Vitalik's own address is delegated at the time of writing, which makes it a useful first example.
 
 ## Tool map
@@ -61,7 +67,8 @@ The server exposes 173 tools across 160+ networks, checked on 2026-09-08 from a 
 | Simulation | **`simulateAssetChanges`**, **`simulateExecution`**, `simulateAssetChangesBundle` | Free. Read-only preview of an unsigned transaction |
 | Trace / debug | `traceTransaction`, `traceCall`, `debugTraceTransaction`, `debugTraceCall` | Paid |
 | Account abstraction | `estimateUserOperationGas`, `getUserOperationReceipt`, `requestGasAndPaymasterAndData` | For ERC-4337 flows, planned lab |
-| Solana | `solana_getBalance`, `solana_getAssetsByOwner`, `solana_searchAssets`, `solana_getTransaction` | RPC plus DAS, planned lab |
+| Solana RPC | **`solana_getEpochInfo`**, **`solana_getAccountInfo`**, **`solana_getTokenAccountsByOwner`**, **`solana_getSignaturesForAddress`**, **`solana_getTransaction`**, `solana_getBalance`, `solana_getProgramAccounts`, `solana_requestAirdrop` | Standard Solana RPC, 50 tools, on `solana-mainnet` and `solana-devnet`. Lab 4. The airdrop tool is devnet-only and the labs never call it |
+| Solana enhanced and DAS | **`solana_getPriorityFeeEstimate`**, **`solana_getAssetsByOwner`**, **`solana_getAssetProof`**, `solana_getAsset`, `solana_searchAssets`, `solana_getTokenAccounts` | Priority fees are mainnet-only. The DAS family answers `-32001` on mainnet for Free apps at the time of writing and works on devnet; Lab 4 runs its assets section there. `solana_getAssets`, `solana_getTokenAccounts` and `solana_getAssetSignatures` map to the v2 DAS endpoints |
 
 The server also publishes MCP resources at `alchemy://networks`, `alchemy://networks/evm`, and `alchemy://networks/solana` with the same data as `list_chains`.
 

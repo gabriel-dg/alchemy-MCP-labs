@@ -32,7 +32,7 @@ Real [Lab 3](labs/03-multichain-brief/) output, observed 2026-09-08. Six tool ca
 
 What that buys you over pointing an agent at a public RPC node:
 
-- **One endpoint, 160+ chains.** Ethereum, every major L2, Solana. No per-chain URLs to collect, rotate, or paste into a config file.
+- **One endpoint, 160+ chains.** Ethereum, every major L2, Solana. No per-chain URLs to collect, rotate, or paste into a config file. Lab 4 briefs a Solana wallet over the same connection you used for Ethereum.
 - **One request, five chains.** The table above is a single `getTokensByAddress` call with a `networks` list: balances, metadata and USD prices come back together, already joined. That is Lab 3.
 - **More than JSON-RPC.** Token balances and metadata, USD prices with a year of daily history, NFTs, transfer history, and transaction simulation that shows what an unsigned transaction would do *before* you sign it. That last one is Lab 1.
 - **No API keys anywhere.** OAuth, and the server routes through the app you select. Nothing secret lands in a config file you might commit.
@@ -54,7 +54,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 
 ## Quick start
 
-**First live result: five minutes.** The full four-lab track: about forty.
+**First live result: five minutes.** The full five-lab track: about fifty.
 
 1. **Get the repo**:
 
@@ -69,6 +69,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 5. **Run Lab 1**: paste a prompt from [labs/01-before-you-sign](labs/01-before-you-sign/README.md). A real pre-sign safety report on a wallet, a mined transaction, or unsigned calldata.
 6. **Run Lab 2**: paste a prompt from [labs/02-contract-inspector](labs/02-contract-inspector/README.md) on an address Lab 1 told you to look at. That loop is the point of the pair.
 7. **Run Lab 3**: paste a prompt from [labs/03-multichain-brief](labs/03-multichain-brief/README.md). The same address on five chains, in dollars, from one call.
+8. **Run Lab 4**: paste a prompt from [labs/04-solana-wallet-brief](labs/04-solana-wallet-brief/README.md). A Solana wallet in dollars, its newest transaction in one sentence, and its NFTs. Same connection, other VM. Needs Solana enabled on your app.
 
 ## Labs
 
@@ -78,6 +79,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 | 1 | [before-you-sign](labs/01-before-you-sign/) | 15 min | Preflight a wallet (ENS or address), inspect a mined transaction, or **simulate unsigned calldata** and get an **OK / REVIEW / DO NOT SIGN** verdict. Runs on the Free tier. |
 | 2 | [contract-inspector](labs/02-contract-inspector/) | 10 min | Answer "what is this address?": type, proxy, verified source, token identity, price, age, activity, and an **ESTABLISHED / UNCERTAIN / RED FLAGS / NOT A CONTRACT** assessment. The follow-up to every Lab 1 REVIEW. |
 | 3 | [multichain-brief](labs/03-multichain-brief/) | 10 min | One call, every chain, in dollars. Native and token balances for an address or ENS name across Ethereum, Base, Arbitrum, OP Mainnet and Polygon, a USD total with a coverage line, a watchlist for tokens page 1 cannot see, and the 7-day price change. |
+| 4 | [solana-wallet-brief](labs/04-solana-wallet-brief/) | 10 min | Same brief, other VM. SOL and tokens in dollars, a watchlist by mint, the last five signatures, the newest transaction decoded into one sentence (who signed, what moved), and NFTs including compressed ones via DAS. Paste a signature instead of an address to decode any transaction. Assets run on devnet until DAS opens on mainnet for Free apps. |
 
 ## What a lab looks like
 
@@ -91,10 +93,12 @@ labs/                  walkthroughs for humans (start here)
   01-before-you-sign/
   02-contract-inspector/
   03-multichain-brief/
+  04-solana-wallet-brief/
 skills/                playbooks for agents (what a lab runs)
   before-you-sign/
   contract-inspector/
   multichain-brief/
+  solana-wallet-brief/
 docs/how-it-works.md   how the pieces fit, glossary, tool map
 SETUP.md               connect your agent, create an app, Free vs paid
 CLAUDE.md              entry point for Claude Code when it opens this repo
@@ -103,17 +107,16 @@ CONTRIBUTING.md        how to add a lab or a skill
 
 ## Roadmap
 
-Planned, not yet in the repo. Every tool below was probed on the Free tier on 2026-09-07 and works. Labs 1 and 2 are the **safety** track; Lab 3 opened the **explore** track, and the next two continue it, each showing a tool family the repo has not touched yet; the last two are **operate**.
+Planned, not yet in the repo. Every tool below was probed on the Free tier and works. Labs 1 and 2 are the **safety** track; Labs 3 and 4 are the **explore** track, one for EVM chains and one for Solana; the next one continues it with a tool family the repo has not touched yet, and the last three are **operate**.
 
 | # | Lab | One-line hook | Tool family it introduces |
 |---|-----|---------------|---------------------------|
-| 4 | **nft-collection-brief** | Is this NFT worth what they say? Collection metadata, floor price, holder count, and the rarity of one token id. | NFT API: floor price, owners, attributes, rarity |
-| 5 | **solana-wallet-brief** | The Lab 1 wallet briefing for a Solana address: balance, assets via the Digital Asset Standard, recent signatures. Needs Solana enabled on your app. | Solana RPC and DAS |
+| 5 | **nft-collection-brief** | Is this NFT worth what they say? Collection metadata, floor price, holder count, and the rarity of one token id. | NFT API: floor price, owners, attributes, rarity |
 | 6 | **allowance-check** | Which well-known spenders can already move my tokens? A matrix of your address against a list of known routers and marketplaces. Honest scope: unknown spenders need event history, which Free caps at 10 blocks. | Allowance reads at scale |
 | 7 | **wallet-checkup** | One prompt that runs Labs 1, 2, and 6 on your own wallet and merges them into a single report. A capstone that shows skills composing. | Agent orchestration, no new tools |
 | 8 | **watch-a-wallet** | Get notified when an address moves. Creates an Alchemy webhook, so it is the one lab that writes to your account. Opt-in, clearly labelled, with teardown. | Notify webhooks |
 
-Dropped from the earlier list: **token-check**, because Lab 2 already covers metadata, price, counterfeit detection, and burst patterns for a token address. **aa-session-lab** is folded into a possible Lab 1 appendix that explains a UserOp by hash, read-only. Usage and cost tools are a step in Lab 0 rather than a lab of their own.
+Dropped from the earlier list: **token-check**, because Lab 2 already covers metadata, price, counterfeit detection, and burst patterns for a token address. **aa-session-lab** is folded into a possible Lab 1 appendix that explains a UserOp by hash, read-only. Usage and cost tools are a step in Lab 0 rather than a lab of their own. **solana-wallet-brief** moved up from 5 to 4 and shipped, because it is the one lab that turns "labs for Ethereum" into "one MCP, two VMs".
 
 ## Links
 

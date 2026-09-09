@@ -34,7 +34,15 @@
       "mcp__alchemy__isSpamContract",
       "mcp__alchemy__getNFTsForOwner",
       "mcp__alchemy__getNFTsByAddress",
-      "mcp__alchemy__solana_getBalance"
+      "mcp__alchemy__solana_getBalance",
+      "mcp__alchemy__solana_getEpochInfo",
+      "mcp__alchemy__solana_getPriorityFeeEstimate",
+      "mcp__alchemy__solana_getAccountInfo",
+      "mcp__alchemy__solana_getTokenAccountsByOwner",
+      "mcp__alchemy__solana_getSignaturesForAddress",
+      "mcp__alchemy__solana_getTransaction",
+      "mcp__alchemy__solana_getAssetsByOwner",
+      "mcp__alchemy__solana_getAssetProof"
     ]
   }
 }
