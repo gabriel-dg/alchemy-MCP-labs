@@ -16,3 +16,6 @@ ehthumbs.db
 
 # Local maintainer notes, never published
 NOTES.local.md
+
+# Local Claude permissions and preferences, never published
+.claude/settings.local.json

@@ -16,6 +16,8 @@
 
 You never write code. The skill tells the agent which tools to call and in what order. The agent calls them over MCP, gets JSON back, and writes a report you can read.
 
+Lab 5 adds a second flow after explicit consent: **wallet transfer → Alchemy Notify → your HTTPS receiver**. MCP configures and checks the temporary subscription; subsequent events go to the receiver independently of the chat. The receiver is not an Alchemy MCP tool, and a webhook does not wake the agent or send email by itself. No receiver means a read-only transfer preview.
+
 ## Concepts
 
 **MCP (Model Context Protocol).** An open standard that lets an AI agent discover a server's tools and call them. Claude Code, Cursor, VS Code, Codex and Claude Desktop all speak it.
@@ -29,6 +31,12 @@ You never write code. The skill tells the agent which tools to call and in what 
 **Compute units (CU).** Alchemy's usage metric. Every call costs some CU. Free apps have a monthly allowance and a rate limit. The labs here use a few hundred CU per run.
 
 **Free vs PAYG.** Some tools and parameters are paid: NFT spam filters, the Trace API, the Debug API, and event-log queries wider than 10 blocks. They return a 400 that mentions payg, upgrade, or billing, or an error that names the allowed range. The skills skip them and note it under Gaps.
+
+**Address Activity webhook.** A subscription for transfers to or from a list of addresses. Lab 5 uses one Ethereum Mainnet subscription for at most three addresses. RPC calls use `eth-mainnet`; Notify uses `ETH_MAINNET`. Amount thresholds belong in the receiver, not in the creation body. Readback proves configuration, a receiver request proves delivery, and a chain receipt checks the claimed movement; those are different checks.
+
+**Temporary is a cleanup promise.** The Notify creation fields used here have no expiry. Lab 5 records the newly created ID and asks for separate, explicit confirmation before deleting it. Preexisting IDs are protected. A closing chat, a failed verification or a finished observation window does not stop an undeleted webhook.
+
+**Receiver trust.** A public inbox reveals the addresses you chose to follow. A production receiver verifies the raw body's HMAC signature with a privately stored signing key, deduplicates retries and handles reorg removals. No key belongs in the conversation or a reference run. See [Lab 5](../labs/05-watch-a-wallet/README.md) for privacy, bandwidth costs and the no-receiver fallback.
 
 **Proxies.** Many contracts are a thin proxy that forwards every call to an implementation contract stored in a known storage slot. Lab 2 reads those slots with `ethGetStorageAt`. The logic you are trusting lives at the implementation, and it can be upgraded.
 
@@ -54,11 +62,12 @@ You never write code. The skill tells the agent which tools to call and in what 
 
 ## Tool map
 
-The server exposes 173 tools across 160+ networks, checked on 2026-09-08 from a Free-tier connection. Alchemy keeps adding networks, so call `list_chains` for today's list rather than relying on a number written down here. Grouped by family, with the ones the labs use in bold:
+Alchemy's public MCP documentation describes access to 100+ blockchains. The connected server exposed 173 tools when these labs were validated; counts evolve, so call `list_chains` and inspect the live tool surface rather than relying on a number written down here. Grouped by family, with the ones the labs use in bold:
 
 | Family | Examples | Notes |
 |--------|----------|-------|
-| Admin | **`ping`**, **`list_apps`**, **`select_app`**, **`list_chains`**, `get_app`, `get_usage_summary` | `select_app` first. Do not use `create_app` or webhook tools in labs |
+| Admin | **`ping`**, **`list_apps`**, **`select_app`**, **`list_chains`**, `get_app`, `get_usage_summary` | `select_app` first. No app mutations or gas-policy tools in labs |
+| Notify | **`list_webhooks`**, **`get_webhook_addresses`**, **`create_webhook`**, **`delete_webhook`** | Lab 5 only. Creation requires an exact proposal and explicit consent; deletion requires separate confirmation of the new ID. MCP handles configuration and readback; delivery evidence comes from the receiver or Alchemy dashboard. Reads redact secrets |
 | JSON-RPC reads | **`ethBlockNumber`**, **`ethGetBalance`**, **`ethGetCode`**, **`ethGetStorageAt`**, **`ethGetTransactionCount`**, **`ethCall`**, **`ethGetTransactionByHash`**, **`ethGetTransactionReceipt`**, **`ethGetLogs`**, `ethGasPrice`, **`web3Sha3`** | Standard Ethereum RPC on any EVM network. Logs are capped at a 10-block range on Free |
 | Transfers | **`getAssetTransfers`** | History of ETH, ERC-20, ERC-721, ERC-1155 movements for an address or a token contract |
 | Tokens | **`getTokenBalancesByAddress`**, **`getTokensByAddress`**, **`getTokenMetadata`**, **`getTokenAllowance`** | Both balance tools take a `networks` list and answer for every chain in one request. `getTokensByAddress` adds metadata and prices per row |
@@ -80,3 +89,6 @@ The server also publishes MCP resources at `alchemy://networks`, `alchemy://netw
 - **Unsigned call**: a transaction you have not signed yet. It can be simulated. This is where a preflight is useful.
 - **Receipt**: the result of a mined transaction: success or failure, gas used, and the event logs it emitted.
 - **Gaps**: the section of the report that lists what the skill could not verify, and why.
+- **Webhook**: an HTTP POST sent by Alchemy to your receiver when subscribed activity occurs; the subscription remains until removed.
+- **Replay**: applying an alert rule to historical transfers. Useful without a receiver, but not automatic monitoring or evidence of a delivered event.
+- **Teardown**: delete only the resource this run created, after confirmation of its exact ID, and verify its absence.

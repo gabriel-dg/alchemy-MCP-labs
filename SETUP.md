@@ -4,7 +4,7 @@ Time: about 5 minutes. You will create a free Alchemy account and app, connect y
 
 ## Prerequisites
 
-- An Alchemy account. Free is enough for every lab here. Sign up at https://dashboard.alchemy.com
+- An Alchemy account. The labs default to Free. Lab 5's webhook path also needs an available webhook slot and a public receiver; its transfer-preview fallback needs neither. Sign up at https://dashboard.alchemy.com
 - An agent that speaks MCP. Claude Code, Cursor, VS Code with Copilot agent mode, Codex CLI and Claude Desktop have step-by-step instructions below; any other MCP client works too
 - A browser for the one-time OAuth login
 
@@ -113,7 +113,7 @@ Run [Lab 0](labs/00-hello-mcp/README.md). It takes two minutes and exercises the
 
 ## Free vs pay-as-you-go
 
-Every lab in this repo completes on the Free tier. Some tools are paid and return a 400 error with a message mentioning "payg", "upgrade", or "billing". The skills know to skip those and note them in the report.
+Every lab has a Free-tier path. Some tools are paid and return a 400 error with a message mentioning "payg", "upgrade", or "billing". The skills know to skip those and note them in the report. Lab 5 can complete a useful transfer preview without a public receiver or webhook access; that fallback does not install automatic monitoring.
 
 | Tier | What works |
 |------|------------|
@@ -121,6 +121,8 @@ Every lab in this repo completes on the Free tier. Some tools are paid and retur
 | PAYG | NFT spam filters (`excludeFilters`, `spamConfidenceLevel`), Trace API, Debug API, event logs over wider block ranges. `isSpamContract` may also require it |
 
 If you are on a paid plan and want traces or spam filters, say so in your prompt, for example "I am on PAYG, traces are fine."
+
+**Lab 5 webhooks.** Published [pricing](https://www.alchemy.com/pricing), checked 2026-09-11, includes five webhooks per Free account and 100 on PAYG. Delivery consumes CU by payload size. [Lab 5](labs/05-watch-a-wallet/README.md) explains the receiver, current limits, consent gates and mandatory teardown. Its creation/deletion tools are not pre-approved. Never paste a signing key into the agent or use an existing webhook as a disposable lab resource.
 
 ## Networks
 

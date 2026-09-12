@@ -7,6 +7,8 @@
       "mcp__alchemy__select_app",
       "mcp__alchemy__list_chains",
       "mcp__alchemy__get_usage_summary",
+      "mcp__alchemy__list_webhooks",
+      "mcp__alchemy__get_webhook_addresses",
       "mcp__alchemy__web3Sha3",
       "mcp__alchemy__ethBlockNumber",
       "mcp__alchemy__ethGetBalance",

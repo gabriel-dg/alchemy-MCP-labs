@@ -1,6 +1,6 @@
 # alchemy-mcp-labs
 
-Hands-on labs for **Alchemy MCP**: give your coding agent (Claude Code, Cursor, VS Code, Codex) live read access to 160+ blockchains, then use it for something useful.
+Hands-on labs for **Alchemy MCP**: give your coding agent (Claude Code, Cursor, VS Code, Codex) live read access to 100+ blockchains, then use it for something useful.
 
 ## You paste this
 
@@ -32,17 +32,18 @@ Real [Lab 3](labs/03-multichain-brief/) output, observed 2026-09-08. Six tool ca
 
 What that buys you over pointing an agent at a public RPC node:
 
-- **One endpoint, 160+ chains.** Ethereum, every major L2, Solana. No per-chain URLs to collect, rotate, or paste into a config file. Lab 4 briefs a Solana wallet over the same connection you used for Ethereum.
+- **One endpoint, 100+ chains.** Ethereum, major L2s, Solana, and more. No per-chain URLs to collect, rotate, or paste into a config file. Lab 4 briefs a Solana wallet over the same connection you used for Ethereum.
 - **One request, five chains.** The table above is a single `getTokensByAddress` call with a `networks` list: balances, metadata and USD prices come back together, already joined. That is Lab 3.
 - **More than JSON-RPC.** Token balances and metadata, USD prices with a year of daily history, NFTs, transfer history, and transaction simulation that shows what an unsigned transaction would do *before* you sign it. That last one is Lab 1.
-- **No API keys anywhere.** OAuth, and the server routes through the app you select. Nothing secret lands in a config file you might commit.
+- **Events after the chat closes.** Lab 5 prepares an Address Activity webhook for a wallet you choose. With a public receiver and explicit consent, Alchemy delivers transfers automatically; without one, rehearse the alert on real history.
+- **No API keys to configure.** OAuth, and the server routes through the app you select. Lab 5 also explains how to keep webhook signing keys out of reports and commits.
 
 This repo gives you:
 
 - **Labs** in `labs/`: step-by-step walkthroughs you run by pasting a prompt into your agent. Each one tells you what to expect, how to read the result, and how to adapt it to your own wallet or transaction.
 - **Skills** in `skills/`: reusable playbooks that tell the agent exactly which tools to call and how to report. Labs use them. You can also install them so your agent runs them by name.
 
-Everything here is read-only. Nothing signs, sends, or broadcasts.
+Labs 0 to 4 are read-only. **Lab 5 is the only exception:** one temporary webhook, explicit creation consent, and separately confirmed teardown by ID. Nothing signs, sends, or broadcasts a transaction.
 
 ## Who this is for
 
@@ -54,7 +55,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 
 ## Quick start
 
-**First live result: five minutes.** The full five-lab track: about fifty.
+**First live result: five minutes.** The full six-lab track: about sixty-five, including Lab 5 cleanup.
 
 1. **Get the repo**:
 
@@ -70,6 +71,7 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 6. **Run Lab 2**: paste a prompt from [labs/02-contract-inspector](labs/02-contract-inspector/README.md) on an address Lab 1 told you to look at. That loop is the point of the pair.
 7. **Run Lab 3**: paste a prompt from [labs/03-multichain-brief](labs/03-multichain-brief/README.md). The same address on five chains, in dollars, from one call.
 8. **Run Lab 4**: paste a prompt from [labs/04-solana-wallet-brief](labs/04-solana-wallet-brief/README.md). A Solana wallet in dollars, its newest transaction in one sentence, and its NFTs. Same connection, other VM. Needs Solana enabled on your app.
+9. **Run Lab 5**: paste a prompt from [labs/05-watch-a-wallet](labs/05-watch-a-wallet/README.md). Watch a wallet through a temporary webhook, with explicit consent and teardown. No public receiver? Rehearse a 100,000 USDC treasury alert against a real transfer instead.
 
 ## Labs
 
@@ -80,10 +82,11 @@ You do not need to know Solidity. You need a free Alchemy account and an agent t
 | 2 | [contract-inspector](labs/02-contract-inspector/) | 10 min | Answer "what is this address?": type, proxy, verified source, token identity, price, age, activity, and an **ESTABLISHED / UNCERTAIN / RED FLAGS / NOT A CONTRACT** assessment. The follow-up to every Lab 1 REVIEW. |
 | 3 | [multichain-brief](labs/03-multichain-brief/) | 10 min | One call, every chain, in dollars. Native and token balances for an address or ENS name across Ethereum, Base, Arbitrum, OP Mainnet and Polygon, a USD total with a coverage line, a watchlist for tokens page 1 cannot see, and the 7-day price change. |
 | 4 | [solana-wallet-brief](labs/04-solana-wallet-brief/) | 10 min | Same brief, other VM. SOL and tokens in dollars, a watchlist by mint, the last five signatures, the newest transaction decoded into one sentence (who signed, what moved), and NFTs including compressed ones via DAS. Paste a signature instead of an address to decode any transaction. Assets run on devnet until DAS opens on mainnet for Free apps. |
+| 5 | [watch-a-wallet](labs/05-watch-a-wallet/) | 15 min | From a wallet address to an automatic HTTP event. Preview transfers, explicitly consent to one temporary Address Activity webhook, verify configuration and receiver evidence, then confirm teardown by ID. Includes a reproducible USDC alert rehearsal without a receiver and a redacted receiver-backed validation run. |
 
 ## What a lab looks like
 
-Every lab README has the same sections: **Goal**, **Run it** (a prompt to paste), **What you should see**, **Reading the output**, **Try your own**, **Troubleshooting**. When a lab uses a skill, the skill folder holds the agent playbook (`SKILL.md`), the copy-paste prompts (`PROMPTS.md`), and reference runs with real observed values (`examples/`).
+Every lab README has the same sections: **Goal**, **Before you start**, **Run it** (a prompt to paste), **What you should see**, **Reading the output**, **Try your own**, **Now build it**, **Troubleshooting**. When a lab uses a skill, the skill folder holds the agent playbook (`SKILL.md`), the copy-paste prompts (`PROMPTS.md`), and reference runs with real observed values (`examples/`).
 
 ## Repo map
 
@@ -94,11 +97,13 @@ labs/                  walkthroughs for humans (start here)
   02-contract-inspector/
   03-multichain-brief/
   04-solana-wallet-brief/
+  05-watch-a-wallet/
 skills/                playbooks for agents (what a lab runs)
   before-you-sign/
   contract-inspector/
   multichain-brief/
   solana-wallet-brief/
+  watch-a-wallet/
 docs/how-it-works.md   how the pieces fit, glossary, tool map
 SETUP.md               connect your agent, create an app, Free vs paid
 CLAUDE.md              entry point for Claude Code when it opens this repo
@@ -107,16 +112,17 @@ CONTRIBUTING.md        how to add a lab or a skill
 
 ## Roadmap
 
-Planned, not yet in the repo. Every tool below was probed on the Free tier and works. Labs 1 and 2 are the **safety** track; Labs 3 and 4 are the **explore** track, one for EVM chains and one for Solana; the next one continues it with a tool family the repo has not touched yet, and the last three are **operate**.
+Planned, not yet in the repo. Labs 1 and 2 are the **safety** track; Labs 3 and 4 are the **explore** track, one for EVM chains and one for Solana. Lab 5 opens **operate** with Notify webhooks. The next lab returns to NFT exploration, followed by two wallet-operation labs. New labs must verify their own Free-tier behavior before release.
 
 | # | Lab | One-line hook | Tool family it introduces |
 |---|-----|---------------|---------------------------|
-| 5 | **nft-collection-brief** | Is this NFT worth what they say? Collection metadata, floor price, holder count, and the rarity of one token id. | NFT API: floor price, owners, attributes, rarity |
-| 6 | **allowance-check** | Which well-known spenders can already move my tokens? A matrix of your address against a list of known routers and marketplaces. Honest scope: unknown spenders need event history, which Free caps at 10 blocks. | Allowance reads at scale |
-| 7 | **wallet-checkup** | One prompt that runs Labs 1, 2, and 6 on your own wallet and merges them into a single report. A capstone that shows skills composing. | Agent orchestration, no new tools |
-| 8 | **watch-a-wallet** | Get notified when an address moves. Creates an Alchemy webhook, so it is the one lab that writes to your account. Opt-in, clearly labelled, with teardown. | Notify webhooks |
+| 6 | **nft-collection-brief** | Is this NFT worth what they say? Collection metadata, floor price, holder count, and the rarity of one token id. | NFT API: floor price, owners, attributes, rarity |
+| 7 | **allowance-check** | Which well-known spenders can already move my tokens? A matrix of your address against a list of known routers and marketplaces. Honest scope: unknown spenders need event history, which Free caps at 10 blocks. | Allowance reads at scale |
+| 8 | **wallet-checkup** | One prompt that runs Labs 1, 2, and 7 on your own wallet and merges them into a single report. A capstone that shows skills composing. | Agent orchestration, no new tools |
 
 Dropped from the earlier list: **token-check**, because Lab 2 already covers metadata, price, counterfeit detection, and burst patterns for a token address. **aa-session-lab** is folded into a possible Lab 1 appendix that explains a UserOp by hash, read-only. Usage and cost tools are a step in Lab 0 rather than a lab of their own. **solana-wallet-brief** moved up from 5 to 4 and shipped, because it is the one lab that turns "labs for Ethereum" into "one MCP, two VMs".
+
+**watch-a-wallet** moved from 8 to 5 to introduce automatic delivery immediately after the wallet briefs. Its release records live transfer reads, a deterministic no-receiver fallback, and a redacted end-to-end creation, delivery and teardown run; see its [validation evidence and remaining boundaries](skills/watch-a-wallet/examples/validation.md).
 
 ## Links
 

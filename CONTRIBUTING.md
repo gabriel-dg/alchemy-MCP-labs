@@ -12,7 +12,8 @@ Create `labs/NN-<name>/README.md` with these sections, in this order:
 4. **What you should see**: the shape of the output, plus real values observed on a stated date.
 5. **Reading the output**: explain every heading or field the user will see and what to do about it.
 6. **Try your own**: how to swap in the user's inputs, other networks, paid-tier options.
-7. **Troubleshooting**: lab-specific failures only. General ones live in `SETUP.md`.
+7. **Now build it**: the same capability in the user's own application, with official API links.
+8. **Troubleshooting**: lab-specific failures only. General ones live in `SETUP.md`.
 
 Add a row to the Labs table in the root `README.md`.
 
@@ -28,7 +29,7 @@ Create `skills/<name>/` with:
 ### Skill rules
 
 - List only tool names that exist on the Alchemy MCP server. Check with the server's tool list, not from memory.
-- No send, sign, or broadcast steps. No `create_app` or other account-mutating admin tools.
+- No send, sign, or broadcast steps. No `create_app` or other account-mutating admin tools, except Lab 5's explicitly consented temporary webhook creation and separately confirmed deletion by ID. This exception does not apply to other labs. Never pre-approve mutations or delete a preexisting webhook.
 - No API keys, `.env` files, or runtime glue code in skill docs.
 - Design for the Free tier by default. Name the paid tools explicitly and say how to degrade.
 - Do not duplicate `SETUP.md`. Link to it when MCP is missing.
@@ -36,7 +37,7 @@ Create `skills/<name>/` with:
 
 ### Reference runs
 
-Files in `examples/` are cold runs: give a fresh agent only the prompt from `PROMPTS.md`, let it follow `SKILL.md`, and paste its report plus its raw call log. Ask the agent to list what was unclear in the skill and fix the skill before shipping. Start each file with a header line that states the run date and the skill version it ran against, for example `Cold run, 2026-09-07, on skill v0.3.0`. Without the version, a reader comparing a current run against an older example cannot tell a regression from a shortcut the skill has since gained. Chain state changes; readers need to know what to expect to differ.
+Files in `examples/` are cold runs: give a fresh agent only the prompt from `PROMPTS.md`, let it follow `SKILL.md`, and paste its report plus its call log. Use **Raw call log** only for actual unmodified JSON; summarized or redacted results are a **Call log**. Record full non-secret parameters, outcomes, user choices and consent pauses. Never include API keys, signing keys or receiver access URLs. Ask the agent to list what was unclear in the skill and fix the skill before shipping. Start each file with a header line that states the run date and the skill version it ran against, for example `Cold run, 2026-09-07, on skill v0.3.0`. Without the version, a reader comparing a current run against an older example cannot tell a regression from a shortcut the skill has since gained. Chain state changes; readers need to know what to expect to differ. Label scripted or fixture-based checks separately from live cold runs, and state which resource creation, delivery and cleanup steps were not exercised.
 
 ## Checklist before opening a PR
 

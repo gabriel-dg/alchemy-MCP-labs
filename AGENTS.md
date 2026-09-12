@@ -9,10 +9,11 @@ Educational labs that showcase the Alchemy MCP server. Humans read `labs/`, agen
 - Lab 2 (contract-inspector): read `skills/contract-inspector/SKILL.md` and follow it exactly. Same layout for prompts and examples
 - Lab 3 (multichain-brief): read `skills/multichain-brief/SKILL.md` and follow it exactly. Same layout. This lab queries five networks by default; the network list is printed in the report
 - Lab 4 (solana-wallet-brief): read `skills/solana-wallet-brief/SKILL.md` and follow it exactly. Same layout. Default network for this lab is `solana-mainnet`; a `Network: solana-devnet` line switches. The DAS asset tools answer `-32001` on mainnet for Free apps: one call, then record under Gaps. Never call `solana_requestAirdrop`
+- Lab 5 (watch-a-wallet): read `skills/watch-a-wallet/SKILL.md` and follow it exactly. Same layout for prompts and examples. One network (`eth-mainnet`), one temporary Address Activity webhook, at most three addresses. Show the exact proposal and require explicit creation consent; deletion requires separate explicit confirmation of the newly created ID. Never delete a preexisting webhook. No receiver means a read-only transfer preview.
 
 ## Rules for every lab
 
-- Read-only. Never sign, send, or broadcast a transaction. Never call `create_app`, `update_app`, or any webhook or gas-policy tool.
+- Labs 0 to 4 are read-only. Lab 5 is the only exception: `create_webhook` and `delete_webhook` under its consent gates, plus `list_webhooks` and `get_webhook_addresses` for verification. Never sign, send, or broadcast a transaction. Never call `create_app`, `update_app`, `update_webhook`, other webhook mutations, or any gas-policy tool.
 - Call `list_apps` and `select_app` before any RPC or data tool. If several apps exist, ask the user which one.
 - Default network is `eth-mainnet`. Print the network in every report.
 - Assume the Free tier. If a tool returns 400 mentioning payg, upgrade, or billing, do not retry with the same parameters. Record it under Gaps and continue.
